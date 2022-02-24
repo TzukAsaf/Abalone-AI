@@ -18,6 +18,12 @@ public class BoardFrame extends JFrame implements MarbleListener
     private  BoardState ab;
     private int width,height;
 
+    /**
+     * the frame constructor
+     * @param numOfRows
+     * @param numOfColsInFirstRow
+     * @param ab
+     */
     public BoardFrame(int numOfRows, int numOfColsInFirstRow, BoardState ab)
     {
 

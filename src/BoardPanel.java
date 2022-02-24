@@ -15,6 +15,13 @@ public class BoardPanel extends JPanel
     private Marble[][] marbles;
     private MarbleListener listener;
     private int marbleSize = 35;// size in pixels of each marble
+
+    /**
+     * the panel constructor
+     * @param numOfRows
+     * @param numOfColsInFirstRow
+     * @param bf
+     */
     public BoardPanel(int numOfRows, int numOfColsInFirstRow, BoardFrame bf)
     {
         rowsNum = numOfRows;// = 9
@@ -26,6 +33,9 @@ public class BoardPanel extends JPanel
         repaint();
     }
 
+    /**
+     * the function initializes the marble's matrix and paints the screen with marbles
+     */
     public void initMarbles()
     {
         int curX = startX, curY = startY;
@@ -77,15 +87,23 @@ public class BoardPanel extends JPanel
         }
     }
 
-
-    public void setPanelsByBoard() {
+    /**
+     * the function paints the screen with marbles as described in the board matrix
+     *
+     */
+    public void setPanelsByBoard()
+    {
         int colsInRow = colsNum;
         int rows = rowsNum / 2;
         // all the rows except the middle row
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < colsInRow; j++) {
+            for (int j = 0; j < colsInRow; j++)
+            {
+                //the upper half of the hexagon
                 marbles[i][j].setPlayer(board[i][j]);
                 marbles[i][j].drawMarble();
+
+                //the lower half of the hexagon
                 marbles[rowsNum - 1 - i][j].setPlayer(board[rowsNum - 1
                         - i][j]);
                 marbles[rowsNum - 1 - i][j].drawMarble();
