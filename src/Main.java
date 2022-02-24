@@ -24,5 +24,6 @@ public class Main extends JFrame
         af.setResizable(false);
         af.setBoard();
 
+
     }
 }
