@@ -61,9 +61,15 @@ public class BoardFrame extends JFrame implements MarbleListener
     }
 
 
+    /**
+     * the function is in charge of managing the event of clicking a marble
+     * @param pos
+     */
     @Override
     public void MarbleSelected(Point pos)
     {
+
+        bp.get_panels()[pos.y][pos.x].markMarble();
 
     }
 }

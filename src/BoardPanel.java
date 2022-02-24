@@ -12,7 +12,7 @@ public class BoardPanel extends JPanel
     private int rowsNum;
     private Player[][] board;// for each cell, which player has the possession
 
-    private Marble[][] marbles;
+    private Marble[][] marbles;// array that contains the marbles
     private MarbleListener listener;
     private int marbleSize = 35;// size in pixels of each marble
 
