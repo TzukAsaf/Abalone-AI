@@ -33,6 +33,15 @@ public class BoardManage
         dataStructure = new BoardStructure(board.dataStructure);
     }
 
+
+    /**
+     * the function gets arraylist of the marbles that already been selected, and a desired point to put a new marble,
+     * and returns true if the marble can be legally added according to the game's rules.
+     * @param newmarble
+     * @param selectedmarbles
+     * @param player
+     * @return
+     */
     public boolean LegalAdd(Point newmarble, ArrayList<Point> selectedmarbles, Player player)
     {
         if(player != Player.WHITE)// if the selected marble belongs to the AI
