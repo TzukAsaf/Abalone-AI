@@ -156,8 +156,12 @@ public class BoardFrame extends JFrame implements MarbleListener
         else
         {
             //the selected marble hasn't been selected yet
-            bp.get_panels()[pos.y][pos.x].markMarble();
-            selected.add(pos);
+            if(bp.get_panels()[pos.y][pos.x].getPlayer() == Player.WHITE && ab.getBoard().LegalAdd(pos, selected))
+            {
+                bp.get_panels()[pos.y][pos.x].markMarble();
+                selected.add(pos);
+            }
+
         }
         System.out.println(selected);
 

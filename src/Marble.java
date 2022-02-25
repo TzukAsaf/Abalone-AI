@@ -69,11 +69,10 @@ public class Marble extends JPanel
 
     public void markMarble()
     {
-        if(player == Player.WHITE)
-        {
-            image = new MyImage("Assets/mark.png", 0, 0, size, size);
-            repaint();
-        }
+
+        image = new MyImage("Assets/mark.png", 0, 0, size, size);
+        repaint();
+
 
     }
     public Player getPlayer() {
