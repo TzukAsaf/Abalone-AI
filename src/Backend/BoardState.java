@@ -16,6 +16,9 @@ public class BoardState
     public void initBoard() {
         board.initBoard();
     }
+    public BoardManage getBoard() {
+        return board;
+    }
     public Player[][] boardDescription() {
         return board.boardDescription();
     }
