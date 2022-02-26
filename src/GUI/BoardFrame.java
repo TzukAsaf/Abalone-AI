@@ -1,10 +1,11 @@
+package GUI;
+
 import Backend.BoardState;
 import enums.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Vector;
@@ -76,12 +77,12 @@ public class BoardFrame extends JFrame implements MarbleListener
     {
         try
         {
-            right.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("Assets/right.png")))));
-            left.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("Assets/left.png")))));
-            upright.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("Assets/upright.png")))));
-            downright.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("Assets/downright.png")))));
-            upleft.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("Assets/upleft.png")))));
-            downleft.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("Assets/downleft.png")))));
+            right.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/right.png")))));
+            left.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/left.png")))));
+            upright.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/upright.png")))));
+            downright.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/downright.png")))));
+            upleft.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/upleft.png")))));
+            downleft.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/downleft.png")))));
 
         } catch (Exception ex)
         {

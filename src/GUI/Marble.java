@@ -1,3 +1,5 @@
+package GUI;
+
 import enums.Player;
 
 
@@ -58,11 +60,11 @@ public class Marble extends JPanel
         }
         if(player==Player.WHITE)
         {
-            image=new MyImage("Assets/white-ball.png", 0, 0, size, size);
+            image=new MyImage("../Assets/white-ball.png", 0, 0, size, size);
         }
         if(player==Player.BLACK)
         {
-            image=new MyImage("Assets/black-ball.png", 0, 0, size, size);
+            image=new MyImage("../Assets/black-ball.png", 0, 0, size, size);
         }
         repaint();
     }
@@ -70,7 +72,7 @@ public class Marble extends JPanel
     public void markMarble()
     {
 
-        image = new MyImage("Assets/mark.png", 0, 0, size, size);
+        image = new MyImage("../Assets/mark.png", 0, 0, size, size);
         repaint();
 
 

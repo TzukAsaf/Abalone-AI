@@ -1,4 +1,5 @@
 import Backend.BoardState;
+import GUI.BoardFrame;
 
 
 import javax.swing.*;

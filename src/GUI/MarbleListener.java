@@ -1,3 +1,5 @@
+package GUI;
+
 import java.awt.Point;
 
 public interface MarbleListener
