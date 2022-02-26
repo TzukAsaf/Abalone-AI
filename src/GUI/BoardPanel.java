@@ -28,7 +28,7 @@ public class BoardPanel extends JPanel
         colsNum = 5;
         board = null;
         marbles = new Marble[rowsNum][rowsNum];
-        backgroundImage = new MyImage("../Assets\\abalone_board.png",0,0,1000,565);
+        backgroundImage = new MyImage("../Assets/abalone_board.png",0,0,1000,565);
         listener = bf;
         repaint();
     }
