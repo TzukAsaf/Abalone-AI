@@ -57,7 +57,8 @@ public class BoardManage
         {
             if(IsInSameRow(selectedmarbles.get(0), selectedmarbles.get(1)))//if the two marbles are in the same row, the 3rd must be also in that row
             {
-                if(newmarble.y != selectedmarbles.get(0).y)// allow only if the selected marble is in the same row
+                if(!Consecutive(newmarble.x, selectedmarbles.get(0).x, selectedmarbles.get(1).x) || !IsInSameRow(selectedmarbles.get(0), newmarble))
+                    // allow only if the selected marble is adjacent to the other two and in the same row
                     return false;
             }
             else// the two marbles are in diagonal, so the 3rd must be also
@@ -86,6 +87,20 @@ public class BoardManage
     public boolean IsInSameRow(Point p1, Point p2)
     {
         return p1.y == p2.y;
+    }
+
+    /**
+     * the function returns true if the three numbers are adjacent to each other
+     * @param x1
+     * @param x2
+     * @param x3
+     * @return
+     */
+    public static boolean Consecutive(int x1, int x2, int x3)
+    {
+        int min = Math.min(x1, Math.min(x2, x3));
+        int max = Math.max(x1, Math.max(x2, x3));
+        return max - min == 2 && x1 != x2 && x1 != x3 && x2 != x3;
     }
 
     /**
