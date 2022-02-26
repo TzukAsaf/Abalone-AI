@@ -26,11 +26,9 @@ public class BoardFrame extends JFrame implements MarbleListener
 
     /**
      * the frame constructor
-     * @param numOfRows
-     * @param numOfColsInFirstRow
      * @param ab
      */
-    public BoardFrame(int numOfRows, int numOfColsInFirstRow, BoardState ab){
+    public BoardFrame(BoardState ab){
 
         setLayout(null);
         width=1000;
@@ -38,7 +36,7 @@ public class BoardFrame extends JFrame implements MarbleListener
         setVisible(true);
         setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        bp=new BoardPanel(numOfRows,numOfColsInFirstRow,this);
+        bp=new BoardPanel(this);
         this.ab = ab;
         selected = new ArrayList<>();
         add(bp);

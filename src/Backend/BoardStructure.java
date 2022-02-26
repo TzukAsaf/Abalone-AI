@@ -14,9 +14,9 @@ public class BoardStructure
 
 
 
-    public BoardStructure(int numOfRows, int numOfColsInFirstRow) {
-        this.size = numOfRows;
-        this.numOfColsInFirstRow = numOfColsInFirstRow;
+    public BoardStructure() {
+        this.size = 9;
+        this.numOfColsInFirstRow = 5;
         this.dataSet = new MarbleManage[size][size];
     }
 

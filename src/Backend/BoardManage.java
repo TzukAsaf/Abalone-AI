@@ -19,11 +19,10 @@ public class BoardManage
     private int numOfColsInFirstRow;
     private BoardStructure dataStructure;
 
-    public BoardManage(int numOfRows, int firstRowCols) {
-        this.numOfRows = numOfRows;
-        numOfColsInFirstRow = firstRowCols;
-        dataStructure = new BoardStructure(numOfRows,
-                numOfColsInFirstRow);
+    public BoardManage() {
+        this.numOfRows = 9;
+        numOfColsInFirstRow = 5;
+        dataStructure = new BoardStructure();
     }
 
     public BoardManage(BoardManage board)

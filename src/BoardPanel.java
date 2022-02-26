@@ -18,14 +18,12 @@ public class BoardPanel extends JPanel
 
     /**
      * the panel constructor
-     * @param numOfRows
-     * @param numOfColsInFirstRow
      * @param bf
      */
-    public BoardPanel(int numOfRows, int numOfColsInFirstRow, BoardFrame bf)
+    public BoardPanel(BoardFrame bf)
     {
-        rowsNum = numOfRows;// = 9
-        colsNum = numOfColsInFirstRow;// = 5
+        rowsNum = 9;
+        colsNum = 5;
         board = null;
         marbles = new Marble[rowsNum][rowsNum];
         backgroundImage = new MyImage("Assets\\abalone_board.png",0,0,1000,565);

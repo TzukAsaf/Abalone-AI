@@ -10,15 +10,9 @@ public class Main extends JFrame
     public static void main(String[] args)
     {
 
-        int numOfRows = 9, numOfColsInFirstRow = 5;
-
-        BoardState abalon = new BoardState(numOfRows,
-                numOfColsInFirstRow);
-
-
+        BoardState abalon = new BoardState();
         abalon.initBoard();
-        BoardFrame af = new BoardFrame(numOfRows,
-                numOfColsInFirstRow, abalon);
+        BoardFrame af = new BoardFrame(abalon);
         af.setLocationRelativeTo(null);//make the screen pop up in middle
         af.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         af.setResizable(false);

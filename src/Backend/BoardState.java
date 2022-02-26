@@ -8,9 +8,9 @@ public class BoardState
     private BoardManage board;
 
 
-    public BoardState(int numOfRows, int numOfColsInFirstRow)
+    public BoardState()
     {
-        board = new BoardManage(numOfRows, numOfColsInFirstRow);
+        board = new BoardManage();
 
     }
     public void initBoard() {
