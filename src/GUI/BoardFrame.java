@@ -6,6 +6,8 @@ import enums.Player;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Vector;
@@ -23,7 +25,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     private JButton right, left, upright, upleft, downright, downleft;
     private  BoardState ab;
     private ArrayList<Point> selected;// the marbles that the player has selected
-    private int width,height;
+    private int width,height, changewidth = 55;
 
     /**
      * the frame constructor
@@ -90,39 +92,49 @@ public class BoardFrame extends JFrame implements MarbleListener
         }
         right.setOpaque(false);
         right.setContentAreaFilled(false);
-        right.setBounds(860,250,90,90);
+        right.setBounds(860-changewidth,250,90,90);
         right.setLayout(null);
         right.setVisible(true);
+        right.addActionListener(this::RightActionPerformed);
 
         left.setOpaque(false);
         left.setContentAreaFilled(false);
-        left.setBounds(770,250,90,90);
+        left.setBounds(770-changewidth,250,90,90);
         left.setLayout(null);
         left.setVisible(true);
+        left.addActionListener(this::LeftActionPerformed);
+
 
         upright.setOpaque(false);
         upright.setContentAreaFilled(false);
-        upright.setBounds(860,160,90,90);
+        upright.setBounds(860-changewidth,160,90,90);
         upright.setLayout(null);
         upright.setVisible(true);
+        upright.addActionListener(this::UprightActionPerformed);
+
 
         downright.setOpaque(false);
         downright.setContentAreaFilled(false);
-        downright.setBounds(860,340,90,90);
+        downright.setBounds(860-changewidth,340,90,90);
         downright.setLayout(null);
         downright.setVisible(true);
+        downright.addActionListener(this::DownrightActionPerformed);
+
 
         upleft.setOpaque(false);
         upleft.setContentAreaFilled(false);
-        upleft.setBounds(770,160,90,90);
+        upleft.setBounds(770-changewidth,160,90,90);
         upleft.setLayout(null);
         upleft.setVisible(true);
+        upleft.addActionListener(this::UpleftActionPerformed);
+
 
         downleft.setOpaque(false);
         downleft.setContentAreaFilled(false);
-        downleft.setBounds(770,340,90,90);
+        downleft.setBounds(770-changewidth,340,90,90);
         downleft.setLayout(null);
         downleft.setVisible(true);
+        downleft.addActionListener(this::DownleftActionPerformed);
 
 
 
@@ -165,4 +177,34 @@ public class BoardFrame extends JFrame implements MarbleListener
         System.out.println(selected);
 
     }
+    private void RightActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        ab.getBoard().MakeMove("Right");
+    }
+
+    private void LeftActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        ab.getBoard().MakeMove("Left");
+    }
+
+    private void UprightActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        ab.getBoard().MakeMove("Up Right");
+    }
+
+    private void DownrightActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        ab.getBoard().MakeMove("Down right");
+    }
+
+    private void UpleftActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        ab.getBoard().MakeMove("Up left");
+    }
+
+    private void DownleftActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        ab.getBoard().MakeMove("Down left");
+    }
+
 }

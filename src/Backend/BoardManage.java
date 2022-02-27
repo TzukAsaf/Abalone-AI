@@ -77,6 +77,11 @@ public class BoardManage
         return true;
     }
 
+    public void MakeMove(String dir)
+    {
+        System.out.printf("you clicked %s\n", dir);
+    }
+
     /**
      * the function returns true if the given points are in the same row
      * @param p1
