@@ -5,8 +5,13 @@ import java.awt.*;
 
 public enum Direction
 {
-    RIGHT(null), LEFT(null), UPRIGHT(null), UPLEFT(null), DOWNRIGHT(null), DOWNLEFT(null);
-    private Point move;
+    RIGHT(new Point(1,0)),
+    LEFT(new Point(-1,0)),
+    UPRIGHT(new Point(1, -1)),
+    UPLEFT(new Point(0, -1)),
+    DOWNRIGHT( new Point( 0, 1)),
+    DOWNLEFT( new Point(-1,1));
+    private final Point move;
 
     Direction(Point p)
     {
@@ -17,25 +22,7 @@ public enum Direction
         return move;
     }
 
-    public void SetNeighborsOffsets(Point pos, int rowsNum)
-    {
-        switch (this)
-        {
-            case RIGHT -> RIGHT.move = new Point(1,0);
-            case LEFT -> LEFT.move = new Point(-1,0);
-            case UPRIGHT -> UPRIGHT.move = new Point(1, -1);
-            case UPLEFT -> UPLEFT.move = new Point(0, -1);
-            case DOWNRIGHT -> DOWNRIGHT.move = new Point( 0, 1);
-            case DOWNLEFT -> DOWNLEFT.move = new Point(-1,1);
-        }
-    }
-    public static void SetNeighbors(Point currPos, int numOfRows)
-    {
-        for (Direction d : Direction.values())
-        {
-            d.SetNeighborsOffsets(currPos, numOfRows);
-        }
-    }
+
 
     public static Point AddOffsetToNeighbor(Point source,Point offset)
     {

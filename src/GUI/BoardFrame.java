@@ -1,6 +1,7 @@
 package GUI;
 
 import Backend.BoardState;
+import enums.Direction;
 import enums.Player;
 
 import javax.imageio.ImageIO;
@@ -182,32 +183,32 @@ public class BoardFrame extends JFrame implements MarbleListener
     }
     private void RightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove("Right");
+        ab.getBoard().MakeMove(Direction.RIGHT.GetDirection(), selected);
     }
 
     private void LeftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove("Left");
+        ab.getBoard().MakeMove(Direction.LEFT.GetDirection(), selected);
     }
 
     private void UprightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove("Up Right");
+        ab.getBoard().MakeMove(Direction.UPRIGHT.GetDirection(), selected);
     }
 
     private void DownrightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove("Down right");
+        ab.getBoard().MakeMove(Direction.DOWNRIGHT.GetDirection(), selected);
     }
 
     private void UpleftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove("Up left");
+        ab.getBoard().MakeMove(Direction.UPLEFT.GetDirection(), selected);
     }
 
     private void DownleftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove("Down left");
+        ab.getBoard().MakeMove(Direction.DOWNLEFT.GetDirection(), selected);
     }
 
 }

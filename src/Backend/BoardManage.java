@@ -77,9 +77,15 @@ public class BoardManage
         return true;
     }
 
-    public void MakeMove(String dir)
+    public boolean LegalMove(String dir,  ArrayList<Point> selectedmarbles)
     {
-        System.out.printf("you clicked %s\n", dir);
+        return false;
+    }
+
+    public void MakeMove(Point dir, ArrayList<Point> selectedmarbles)
+    {
+        System.out.println(dir.toString());
+
     }
 
     /**
@@ -157,7 +163,6 @@ public class BoardManage
     public ArrayList<Point> GetNeighbors(Point source) {
         Point neighbor;
         ArrayList<Point> neighbors = new ArrayList<>();
-        Direction.SetNeighbors(source, numOfRows);
         for (Direction d : Direction.values()) {
             neighbor = Direction.AddOffsetToNeighbor(source, d.GetDirection());
             // if the coordinate is in the bounds of the board
