@@ -40,6 +40,8 @@ public class BoardFrame extends JFrame implements MarbleListener
         setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         bp=new BoardPanel(this);
+        setLocationRelativeTo(null);//make the screen pop up in middle
+        setResizable(false);
         this.ab = ab;
         selected = new ArrayList<>();
         add(bp);
@@ -55,6 +57,7 @@ public class BoardFrame extends JFrame implements MarbleListener
         upright = new JButton();
         upleft = new JButton();
         setButtons();
+        setBoard();
     }
 
 

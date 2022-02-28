@@ -13,11 +13,7 @@ public class Main extends JFrame
 
         BoardState abalon = new BoardState();
         abalon.initBoard();
-        BoardFrame af = new BoardFrame(abalon);
-        af.setLocationRelativeTo(null);//make the screen pop up in middle
-        af.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        af.setResizable(false);
-        af.setBoard();
+        new BoardFrame(abalon);
 
 
     }
