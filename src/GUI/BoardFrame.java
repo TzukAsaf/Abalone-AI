@@ -179,36 +179,41 @@ public class BoardFrame extends JFrame implements MarbleListener
 
         }
         System.out.println(selected);
-
     }
     private void RightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.RIGHT.GetDirection(), selected);
+        ab.getBoard().MakeMove(Direction.RIGHT, selected);
+        setBoard();
     }
 
     private void LeftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.LEFT.GetDirection(), selected);
+        ab.getBoard().MakeMove(Direction.LEFT, selected);
+        setBoard();
     }
 
     private void UprightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.UPRIGHT.GetDirection(), selected);
+        ab.getBoard().MakeMove(Direction.UPRIGHT, selected);
+        setBoard();
     }
 
     private void DownrightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.DOWNRIGHT.GetDirection(), selected);
+        ab.getBoard().MakeMove(Direction.DOWNRIGHT, selected);
+        setBoard();
     }
 
     private void UpleftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.UPLEFT.GetDirection(), selected);
+        ab.getBoard().MakeMove(Direction.UPLEFT, selected);
+        setBoard();
     }
 
     private void DownleftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.DOWNLEFT.GetDirection(), selected);
+        ab.getBoard().MakeMove(Direction.DOWNLEFT, selected);
+        setBoard();
     }
 
 }

@@ -5,6 +5,7 @@ import enums.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.Vector;
 
 public class BoardManage
@@ -77,14 +78,65 @@ public class BoardManage
         return true;
     }
 
-    public boolean LegalMove(String dir,  ArrayList<Point> selectedmarbles)
-    {
-        return false;
+    public boolean LegalMove(Direction dir,  ArrayList<Point> selectedmarbles) throws Exception {
+        int playerMarbles = 0, computerMarbles = 0;
+        Point pointsCounter = new Point();
+        if(selectedmarbles.isEmpty())
+        {
+            throw new Exception("No marble selected");
+        }
+        return true;
+
     }
 
-    public void MakeMove(Point dir, ArrayList<Point> selectedmarbles)
+    public boolean IsBroadsideMove(ArrayList<Point> selectedmarbles)
     {
-        System.out.println(dir.toString());
+        for (Point selectedmarble : selectedmarbles)
+            if (selectedmarble.y != selectedmarbles.get(0).y)
+                return false;
+        return true;
+
+    }
+
+    /**
+     *
+     * @param selectedmarbles
+     * @return arraylist of points after adding each of them the offset
+     */
+    public ArrayList<Point> NewLocations(ArrayList<Point> selectedmarbles, Direction offset)
+    {
+
+        ArrayList<Point> marblesAfterMove = new ArrayList<>();
+        Point newPoint;
+        for(int i = 0; i < selectedmarbles.size(); i++)
+        {
+            newPoint = Direction.AddOffsetToNeighbor(selectedmarbles.get(i), offset.GetMovementOffsetByCurrentLocation(selectedmarbles.get(i), 9));
+            marblesAfterMove.add(newPoint);
+        }
+        System.out.println(marblesAfterMove);
+        return marblesAfterMove;
+
+    }
+
+    public void MakeMove(Direction dir, ArrayList<Point> selectedmarbles){
+        ArrayList<Point> newLocationMarbles;
+        try
+        {
+            LegalMove(dir, selectedmarbles);
+            //if reached here, the move is legal
+            newLocationMarbles = NewLocations(selectedmarbles, dir);
+            for(int i = 0; i < selectedmarbles.size(); i++)
+            {
+                dataStructure.swapSquaresContents(selectedmarbles.get(i), newLocationMarbles.get(i));
+            }
+
+            selectedmarbles.clear();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
 
     }
 
@@ -100,11 +152,10 @@ public class BoardManage
     }
 
     /**
-     * the function returns true if the three numbers are adjacent to each other
      * @param x1
      * @param x2
      * @param x3
-     * @return
+     * @return true if the three numbers are adjacent to each other
      */
     public static boolean Consecutive(int x1, int x2, int x3)
     {
@@ -114,10 +165,9 @@ public class BoardManage
     }
 
     /**
-     * the function returns true if the given points are in diagonal that starts from left (main)
      * @param p1
      * @param p2
-     * @return
+     * @return true if the given points are in diagonal that starts from left (main)
      */
     public boolean IsInMainDiagonal(Point p1, Point p2)
     {
@@ -125,10 +175,9 @@ public class BoardManage
     }
 
     /**
-     * the function returns true if the given points are in diagonal that starts from right (secondary)
      * @param p1
      * @param p2
-     * @return
+     * @return true if the given points are in diagonal that starts from right (secondary)
      */
     public boolean IsInSecondaryDiagonal(Point p1, Point p2)
     {
@@ -138,9 +187,8 @@ public class BoardManage
 
 
     /**
-     * the function returns how many columns there are in the given row
      * @param rowNum
-     * @return
+     * @return how many columns there are in the given row
      */
     private int numOfColsInRow(int rowNum)
     {
@@ -156,9 +204,8 @@ public class BoardManage
     }
 
     /**
-     * the function returns arraylist of all the neighbors of a given point
      * @param source
-     * @return
+     * @return arraylist of all the neighbors of a given point
      */
     public ArrayList<Point> GetNeighbors(Point source) {
         Point neighbor;
