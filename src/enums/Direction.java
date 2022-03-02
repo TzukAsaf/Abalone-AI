@@ -4,18 +4,19 @@ import java.awt.*;
 
 public enum Direction
 {
-    RIGHT(new Point(1,0)),
-    LEFT(new Point(-1,0)),
-    UPRIGHT(new Point(1, -1)),
-    UPLEFT(new Point(0, -1)),
-    DOWNRIGHT( new Point( 0, 1)),
-    DOWNLEFT( new Point(-1,1));
+    RIGHT(null),
+    LEFT(null),
+    UPRIGHT(null),
+    UPLEFT(null),
+    DOWNRIGHT(null),
+    DOWNLEFT( null);
     private Point move;
 
     Direction(Point p)
     {
         move = p;
     }
+
     public Point GetDirection()
     {
         return move;
@@ -38,7 +39,12 @@ public enum Direction
     {
         return new Point(source.x+offset.x,source.y+offset.y);
     }
-
+    public static void setDirectionsOffsetsByCurrPos(Point currPos, int numOfRows)
+    {
+        for (Direction d : Direction.values()) {
+            d.GetMovementOffsetByCurrentLocation(currPos, numOfRows);
+        }
+    }
 
 
 

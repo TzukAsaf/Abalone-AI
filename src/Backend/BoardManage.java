@@ -125,9 +125,13 @@ public class BoardManage
             LegalMove(dir, selectedmarbles);
             //if reached here, the move is legal
             newLocationMarbles = NewLocations(selectedmarbles, dir);
-            for(int i = 0; i < selectedmarbles.size(); i++)
-            {
-                dataStructure.swapSquaresContents(selectedmarbles.get(i), newLocationMarbles.get(i));
+            //delete the  marbles that have been moved
+            for (Point selectedmarble : selectedmarbles) {
+                dataStructure.setSquareContent(selectedmarble, null);
+            }
+            // set the marbles at their new locations
+            for (Point newLocationMarble : newLocationMarbles) {
+                dataStructure.setSquareContent(newLocationMarble, Player.WHITE);
             }
 
             selectedmarbles.clear();
@@ -210,8 +214,10 @@ public class BoardManage
     public ArrayList<Point> GetNeighbors(Point source) {
         Point neighbor;
         ArrayList<Point> neighbors = new ArrayList<>();
-        for (Direction d : Direction.values()) {
-            neighbor = Direction.AddOffsetToNeighbor(source, d.GetDirection());
+        Direction.setDirectionsOffsetsByCurrPos(source, numOfRows);
+        for (Direction d : Direction.values())
+        {
+            neighbor = Direction.AddOffsetToNeighbor(source, d.GetMovementOffsetByCurrentLocation(source, 9));
             // if the coordinate is in the bounds of the board
             if (IsPointInBoundsOfBoard(neighbor)) {
                 neighbors.add(neighbor);
