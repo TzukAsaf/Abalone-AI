@@ -63,14 +63,14 @@ public class BoardManage
             }
             else// the two marbles are in diagonal, so the 3rd must be also
             {
-                if(IsInMainDiagonal(selectedmarbles.get(0), selectedmarbles.get(1)))// if the two marbles in a diagonal starts from left
+                if(Direction.IsInMainDiag(selectedmarbles.get(0), selectedmarbles.get(1)))// if the two marbles in a diagonal starts from left
                 {
-                    if(!IsInMainDiagonal(selectedmarbles.get(0), newmarble))// the 3rd must be in same diagonal
+                    if(!Direction.IsInMainDiag(selectedmarbles.get(0), newmarble))// the 3rd must be in same diagonal
                         return false;
                 }
                 else// the two marbles are in diagonal starts from right
                 {
-                    if(!IsInSecondaryDiagonal(selectedmarbles.get(0), newmarble))// the 3rd must be in same diagonal
+                    if(!Direction.IsInSecondaryDiag(selectedmarbles.get(0), newmarble))// the 3rd must be in same diagonal
                         return false;
                 }
             }

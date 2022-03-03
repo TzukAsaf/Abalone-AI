@@ -1,6 +1,7 @@
 package enums;
 
 import java.awt.*;
+import java.util.Objects;
 
 public enum Direction
 {
@@ -45,7 +46,43 @@ public enum Direction
             d.GetMovementOffsetByCurrentLocation(currPos, numOfRows);
         }
     }
+    public static boolean IsInMainDiag(Point p1, Point  p2)
+    {
+        Point newp = new Point();
+        if(Objects.equals(p1, AddOffsetToNeighbor(p2, Direction.UPLEFT.GetMovementOffsetByCurrentLocation(p2, 9))) ||
+                Objects.equals(p1, AddOffsetToNeighbor(p2, Direction.DOWNRIGHT.GetMovementOffsetByCurrentLocation(p2, 9))))
+            return true;
+        newp = AddOffsetToNeighbor(p2, Direction.UPLEFT.GetMovementOffsetByCurrentLocation(p2, 9));
 
+
+        if(Objects.equals(p1, AddOffsetToNeighbor(newp, Direction.UPLEFT.GetMovementOffsetByCurrentLocation(newp, 9))))
+            return true;
+
+        newp = AddOffsetToNeighbor(p2, Direction.DOWNRIGHT.GetMovementOffsetByCurrentLocation(p2, 9));
+
+        if(Objects.equals(p1, AddOffsetToNeighbor(newp, Direction.DOWNRIGHT.GetMovementOffsetByCurrentLocation(newp, 9))))
+            return true;
+        return false;
+    }
+
+    public static boolean IsInSecondaryDiag(Point p1, Point  p2)
+    {
+        Point newp = new Point();
+        if(Objects.equals(p1, AddOffsetToNeighbor(p2, Direction.UPRIGHT.GetMovementOffsetByCurrentLocation(p2, 9))) ||
+                Objects.equals(p1, AddOffsetToNeighbor(p2, Direction.DOWNLEFT.GetMovementOffsetByCurrentLocation(p2, 9))))
+            return true;
+        newp = AddOffsetToNeighbor(p2, Direction.UPRIGHT.GetMovementOffsetByCurrentLocation(p2, 9));
+
+
+        if(Objects.equals(p1, AddOffsetToNeighbor(newp, Direction.UPRIGHT.GetMovementOffsetByCurrentLocation(newp, 9))))
+            return true;
+
+        newp = AddOffsetToNeighbor(p2, Direction.DOWNLEFT.GetMovementOffsetByCurrentLocation(p2, 9));
+
+        if(Objects.equals(p1, AddOffsetToNeighbor(newp, Direction.DOWNLEFT.GetMovementOffsetByCurrentLocation(newp, 9))))
+            return true;
+        return false;
+    }
 
 
 }
