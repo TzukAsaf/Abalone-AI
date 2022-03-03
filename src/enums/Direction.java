@@ -46,39 +46,49 @@ public enum Direction
             d.GetMovementOffsetByCurrentLocation(currPos, numOfRows);
         }
     }
-    public static boolean IsInMainDiag(Point p1, Point  p2)
+    /**
+     * @param p1
+     * @param p2
+     * @return true if the given points are in diagonal that starts from left (main)
+     */
+    public static boolean IsInMainDiagonal(Point p1, Point  p2)
     {
-        Point newp = new Point();
+        Point newp;
         if(Objects.equals(p1, AddOffsetToNeighbor(p2, Direction.UPLEFT.GetMovementOffsetByCurrentLocation(p2, 9))) ||
                 Objects.equals(p1, AddOffsetToNeighbor(p2, Direction.DOWNRIGHT.GetMovementOffsetByCurrentLocation(p2, 9))))
+            //if one step to up left or down right is enough
             return true;
+
+        //if it takes two steps up left/ down right to reach
         newp = AddOffsetToNeighbor(p2, Direction.UPLEFT.GetMovementOffsetByCurrentLocation(p2, 9));
-
-
         if(Objects.equals(p1, AddOffsetToNeighbor(newp, Direction.UPLEFT.GetMovementOffsetByCurrentLocation(newp, 9))))
             return true;
 
         newp = AddOffsetToNeighbor(p2, Direction.DOWNRIGHT.GetMovementOffsetByCurrentLocation(p2, 9));
-
         if(Objects.equals(p1, AddOffsetToNeighbor(newp, Direction.DOWNRIGHT.GetMovementOffsetByCurrentLocation(newp, 9))))
             return true;
+
         return false;
     }
 
-    public static boolean IsInSecondaryDiag(Point p1, Point  p2)
+    /**
+     * @param p1
+     * @param p2
+     * @return true if the given points are in diagonal that starts from right (secondary)
+     */
+    public static boolean IsInSecondaryDiagonal(Point p1, Point  p2)
     {
-        Point newp = new Point();
+        Point newp;
         if(Objects.equals(p1, AddOffsetToNeighbor(p2, Direction.UPRIGHT.GetMovementOffsetByCurrentLocation(p2, 9))) ||
                 Objects.equals(p1, AddOffsetToNeighbor(p2, Direction.DOWNLEFT.GetMovementOffsetByCurrentLocation(p2, 9))))
+            //if one step to up right or down left is enough
             return true;
+
+        //if it takes two steps up right / down left to reach
         newp = AddOffsetToNeighbor(p2, Direction.UPRIGHT.GetMovementOffsetByCurrentLocation(p2, 9));
-
-
         if(Objects.equals(p1, AddOffsetToNeighbor(newp, Direction.UPRIGHT.GetMovementOffsetByCurrentLocation(newp, 9))))
             return true;
-
         newp = AddOffsetToNeighbor(p2, Direction.DOWNLEFT.GetMovementOffsetByCurrentLocation(p2, 9));
-
         if(Objects.equals(p1, AddOffsetToNeighbor(newp, Direction.DOWNLEFT.GetMovementOffsetByCurrentLocation(newp, 9))))
             return true;
         return false;
