@@ -5,8 +5,6 @@ import enums.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Stack;
-import java.util.Vector;
 
 public class BoardManage
 {
@@ -63,14 +61,14 @@ public class BoardManage
             }
             else// the two marbles are in diagonal, so the 3rd must be also
             {
-                if(Direction.IsInMainDiag(selectedmarbles.get(0), selectedmarbles.get(1)))// if the two marbles in a diagonal starts from left
+                if(Direction.IsInMainDiagonal(selectedmarbles.get(0), selectedmarbles.get(1)))// if the two marbles in a diagonal starts from left
                 {
-                    if(!Direction.IsInMainDiag(selectedmarbles.get(0), newmarble))// the 3rd must be in same diagonal
+                    if(!Direction.IsInMainDiagonal(selectedmarbles.get(0), newmarble))// the 3rd must be in same diagonal
                         return false;
                 }
                 else// the two marbles are in diagonal starts from right
                 {
-                    if(!Direction.IsInSecondaryDiag(selectedmarbles.get(0), newmarble))// the 3rd must be in same diagonal
+                    if(!Direction.IsInSecondaryDiagonal(selectedmarbles.get(0), newmarble))// the 3rd must be in same diagonal
                         return false;
                 }
             }
@@ -166,27 +164,6 @@ public class BoardManage
         int min = Math.min(x1, Math.min(x2, x3));
         int max = Math.max(x1, Math.max(x2, x3));
         return max - min == 2 && x1 != x2 && x1 != x3 && x2 != x3;
-    }
-
-    /**
-     * @param p1
-     * @param p2
-     * @return true if the given points are in diagonal that starts from left (main)
-     */
-    public boolean IsInMainDiagonal(Point p1, Point p2)
-    {
-        return (p1.x == p2.x && (Math.abs(p1.y - p2.y) == 1 || Math.abs(p1.y - p2.y) == 2));
-    }
-
-    /**
-     * @param p1
-     * @param p2
-     * @return true if the given points are in diagonal that starts from right (secondary)
-     */
-    public boolean IsInSecondaryDiagonal(Point p1, Point p2)
-    {
-        return (Math.abs(p1.y - p2.y) == 1 && Math.abs(p1.x - p2.x) == 1 || (Math.abs(p1.y - p2.y) == 2 && Math.abs(p1.x - p2.x) == 2));
-
     }
 
 
