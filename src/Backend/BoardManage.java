@@ -33,12 +33,11 @@ public class BoardManage
 
 
     /**
-     * the function gets arraylist of the marbles that already been selected, and a desired point to put a new marble,
-     * and returns true if the marble can be legally added according to the game's rules.
+     * the function gets arraylist of the marbles that already been selected, and a desired point to put a new marble
      * @param newmarble
      * @param selectedmarbles
      * @param player
-     * @return
+     * @return true if the marble can be legally added according to the game's rules.
      */
     public boolean LegalAdd(Point newmarble, ArrayList<Point> selectedmarbles, Player player)
     {
@@ -76,14 +75,29 @@ public class BoardManage
         return true;
     }
 
-    public boolean LegalMove(Direction dir,  ArrayList<Point> selectedmarbles) throws Exception {
+    /**
+     * @param dir
+     * @param selectedmarbles
+     * @return the new locations of the marbles, if the selected marbles can be legally moved to the desired direction. throws exception otherwise
+     * @throws Exception
+     */
+    public ArrayList<Point> LegalMove(Direction dir,  ArrayList<Point> selectedmarbles) throws Exception {
         int playerMarbles = 0, computerMarbles = 0;
         Point pointsCounter = new Point();
         if(selectedmarbles.isEmpty())
         {
             throw new Exception("No marble selected");
         }
-        return true;
+        ArrayList<Point> newLocationMarbles = NewLocations(selectedmarbles, dir);
+
+        // if player tries to kill his own soldier
+        for (Point selectedmarble : newLocationMarbles) {
+            if (!IsPointInBoundsOfBoard(selectedmarble))
+                throw new Exception("out of bounds");
+
+        }
+
+        return newLocationMarbles;
 
     }
 
@@ -120,10 +134,9 @@ public class BoardManage
         ArrayList<Point> newLocationMarbles;
         try
         {
-            LegalMove(dir, selectedmarbles);
+            newLocationMarbles = LegalMove(dir, selectedmarbles);
             //if reached here, the move is legal
-            newLocationMarbles = NewLocations(selectedmarbles, dir);
-            //delete the  marbles that have been moved
+            //delete the marbles that have been moved
             for (Point selectedmarble : selectedmarbles) {
                 dataStructure.setSquareContent(selectedmarble, null);
             }
