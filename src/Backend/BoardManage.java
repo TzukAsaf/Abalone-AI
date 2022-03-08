@@ -90,17 +90,20 @@ public class BoardManage
         }
         ArrayList<Point> newLocationMarbles = NewLocations(selectedmarbles, dir);
 
-        for (Point selectedmarble : newLocationMarbles)
+        for (Point newLocationMarble : newLocationMarbles)
         {
             // if player tries to move out of the board
-            if (!IsPointInBoundsOfBoard(selectedmarble))
+            if (!IsPointInBoundsOfBoard(newLocationMarble))
             {
                 selectedmarbles.clear();
                 throw new Exception("out of bounds");
             }
 
             // if player tries to move to a square which is occupied by him
-            if(dataStructure.getSquareContent(selectedmarble) == dataStructure.getSquareContent(selectedmarbles.get(0)))
+            /*explanation for the second condition: in a diagonal move of above 2 marbles, at least one of the marble's new location
+            is a location which is occupied by another selected marble, but that marble will free the spot after the move.
+            so we want to pass a situation where the new location is a location that now is occupied, but will get free*/
+            if(dataStructure.getSquareContent(newLocationMarble) == dataStructure.getSquareContent(selectedmarbles.get(0)) && !selectedmarbles.contains(newLocationMarble))
             {
                 selectedmarbles.clear();
                 throw new Exception("self interrupting soldiers");
