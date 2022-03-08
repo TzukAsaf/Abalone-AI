@@ -90,10 +90,21 @@ public class BoardManage
         }
         ArrayList<Point> newLocationMarbles = NewLocations(selectedmarbles, dir);
 
-        // if player tries to kill his own soldier
-        for (Point selectedmarble : newLocationMarbles) {
+        for (Point selectedmarble : newLocationMarbles)
+        {
+            // if player tries to move out of the board
             if (!IsPointInBoundsOfBoard(selectedmarble))
+            {
+                selectedmarbles.clear();
                 throw new Exception("out of bounds");
+            }
+
+            // if player tries to move to a square which is occupied by him
+            if(dataStructure.getSquareContent(selectedmarble) == dataStructure.getSquareContent(selectedmarbles.get(0)))
+            {
+                selectedmarbles.clear();
+                throw new Exception("self interrupting soldiers");
+            }
 
         }
 
