@@ -81,8 +81,8 @@ public class BoardManage
      * @return the new locations of the marbles, if the selected marbles can be legally moved to the desired direction. throws exception otherwise
      * @throws Exception
      */
-    public ArrayList<Point> LegalMove(Direction dir,  ArrayList<Point> selectedmarbles) throws Exception {
-        int playerMarbles = 0, computerMarbles = 0;
+    public ArrayList<Point> LegalMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player) throws Exception {
+        int playerMarbles = selectedmarbles.size(), opponentMarbles = 0;
         Point pointsCounter = new Point();
         if(selectedmarbles.isEmpty())
         {
@@ -108,6 +108,25 @@ public class BoardManage
                 selectedmarbles.clear();
                 throw new Exception("self interrupting soldiers");
             }
+
+            //if one of the new location is occupied by enemy's marble, we need to check if a push can be made
+            if(dataStructure.getSquareContent(newLocationMarble) == player.getOpponent())
+            {
+                pointsCounter = newLocationMarble;
+                //count how many marbles the opponent have in this direction
+                while(IsPointInBoundsOfBoard(pointsCounter) && dataStructure.getSquareContent(pointsCounter) == player.getOpponent())
+                {
+                    opponentMarbles++;
+                    pointsCounter = Direction.AddOffsetToNeighbor(pointsCounter, dir.GetMovementOffsetByCurrentLocation(pointsCounter, 9));
+                }
+                System.out.println(opponentMarbles);
+                if(opponentMarbles >= playerMarbles)
+                {
+                    selectedmarbles.clear();
+                    throw new Exception("opponent overpowers you");
+                }
+            }
+
 
         }
 
@@ -144,11 +163,11 @@ public class BoardManage
 
     }
 
-    public void MakeMove(Direction dir, ArrayList<Point> selectedmarbles){
+    public void MakeMove(Direction dir, ArrayList<Point> selectedmarbles, Player player){
         ArrayList<Point> newLocationMarbles;
         try
         {
-            newLocationMarbles = LegalMove(dir, selectedmarbles);
+            newLocationMarbles = LegalMove(dir, selectedmarbles, player);
             //if reached here, the move is legal
             //delete the marbles that have been moved
             for (Point selectedmarble : selectedmarbles) {
