@@ -36,6 +36,18 @@ public enum Direction
         };
     }
 
+    public Direction GetOppositeDir()
+    {
+        Direction d=this;
+        return switch (d) {
+            case UPRIGHT -> DOWNLEFT;
+            case DOWNRIGHT -> UPLEFT;
+            case UPLEFT -> DOWNRIGHT;
+            case DOWNLEFT -> UPRIGHT;
+            case RIGHT ->LEFT;
+            case LEFT -> RIGHT;
+        };
+    }
     public static Point AddOffsetToNeighbor(Point source,Point offset)
     {
         return new Point(source.x+offset.x,source.y+offset.y);

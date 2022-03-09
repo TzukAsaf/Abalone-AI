@@ -82,18 +82,21 @@ public class BoardManage
      * @throws Exception
      */
     public ArrayList<Point> LegalMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player) throws Exception {
-        int playerMarbles = selectedmarbles.size(), opponentMarbles = 0;
-        Point pointsCounter = new Point();
+        int playerMarbles = selectedmarbles.size(), opponentMarbles;
+        Point oppPointsCounter;
+        Point playerPointsCounter;
         if(selectedmarbles.isEmpty())
         {
             throw new Exception("No marble selected");
         }
         ArrayList<Point> newLocationMarbles = NewLocations(selectedmarbles, dir);
 
-        for (Point newLocationMarble : newLocationMarbles)
+        for (int i = 0; i < newLocationMarbles.size(); i++)
         {
+            opponentMarbles = 0;
+            playerMarbles = 0;
             // if player tries to move out of the board
-            if (!IsPointInBoundsOfBoard(newLocationMarble))
+            if (!IsPointInBoundsOfBoard(newLocationMarbles.get(i)))
             {
                 selectedmarbles.clear();
                 throw new Exception("out of bounds");
@@ -103,28 +106,37 @@ public class BoardManage
             /*explanation for the second condition: in a diagonal move of above 2 marbles, at least one of the marble's new location
             is a location which is occupied by another selected marble, but that marble will free the spot after the move.
             so we want to pass a situation where the new location is a location that now is occupied, but will get free*/
-            if(dataStructure.getSquareContent(newLocationMarble) == dataStructure.getSquareContent(selectedmarbles.get(0)) && !selectedmarbles.contains(newLocationMarble))
+            if(dataStructure.getSquareContent(newLocationMarbles.get(i)) == dataStructure.getSquareContent(selectedmarbles.get(0)) && !selectedmarbles.contains(newLocationMarbles.get(i)))
             {
                 selectedmarbles.clear();
                 throw new Exception("self interrupting soldiers");
             }
 
             //if one of the new location is occupied by enemy's marble, we need to check if a push can be made
-            if(dataStructure.getSquareContent(newLocationMarble) == player.getOpponent())
+            if(dataStructure.getSquareContent(newLocationMarbles.get(i)) == player.getOpponent())
             {
-                pointsCounter = newLocationMarble;
-                //count how many marbles the opponent have in this direction
-                while(IsPointInBoundsOfBoard(pointsCounter) && dataStructure.getSquareContent(pointsCounter) == player.getOpponent())
+                oppPointsCounter = newLocationMarbles.get(i);
+                playerPointsCounter = selectedmarbles.get(i);
+                //count how many marbles the opponent has in this direction
+                while(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquareContent(oppPointsCounter) == player.getOpponent())
                 {
                     opponentMarbles++;
-                    pointsCounter = Direction.AddOffsetToNeighbor(pointsCounter, dir.GetMovementOffsetByCurrentLocation(pointsCounter, 9));
+                    oppPointsCounter = Direction.AddOffsetToNeighbor(oppPointsCounter, dir.GetMovementOffsetByCurrentLocation(oppPointsCounter, 9));
                 }
-                System.out.println(opponentMarbles);
+
+                //count how many marbles the player has in this direction
+                while(IsPointInBoundsOfBoard(playerPointsCounter) && dataStructure.getSquareContent(playerPointsCounter) == player && selectedmarbles.contains(playerPointsCounter))
+                {
+                    playerMarbles++;
+                    playerPointsCounter = Direction.AddOffsetToNeighbor(playerPointsCounter, dir.GetOppositeDir().GetMovementOffsetByCurrentLocation(playerPointsCounter, 9));
+                }
+
                 if(opponentMarbles >= playerMarbles)
                 {
                     selectedmarbles.clear();
                     throw new Exception("opponent overpowers you");
                 }
+
             }
 
 
