@@ -81,10 +81,16 @@ public class BoardManage
      * @return the new locations of the marbles, if the selected marbles can be legally moved to the desired direction. throws exception otherwise
      * @throws Exception
      */
-    public ArrayList<Point> LegalMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player) throws Exception {
-        int playerMarbles = selectedmarbles.size(), opponentMarbles;
+    public ArrayList<ArrayList<Point>> LegalMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player) throws Exception {
+        int playerMarbles, opponentMarbles;
         Point oppPointsCounter;
         Point playerPointsCounter;
+        ArrayList<Point> opponentMovedMarbles = new ArrayList<>();
+
+        // arraylist of arraylists, the first element is the locations of the player's marble after a move
+        //and the second element is the location of the opponent's marbles after the player's move
+        ArrayList<ArrayList<Point>> newlocations = new ArrayList<>();
+
         if(selectedmarbles.isEmpty())
         {
             throw new Exception("No marble selected");
@@ -122,7 +128,9 @@ public class BoardManage
                 {
                     opponentMarbles++;
                     oppPointsCounter = Direction.AddOffsetToNeighbor(oppPointsCounter, dir.GetMovementOffsetByCurrentLocation(oppPointsCounter, 9));
+                    opponentMovedMarbles.add(newLocationMarbles.get(i));
                 }
+                //if true, that means that a player's marble is in the way, like sandwich. thus, don't allow the move
                 if(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquareContent(oppPointsCounter) == player)
                 {
                     selectedmarbles.clear();
@@ -146,8 +154,10 @@ public class BoardManage
 
 
         }
-
-        return newLocationMarbles;
+        opponentMovedMarbles = NewLocations(opponentMovedMarbles, dir);
+        newlocations.add(newLocationMarbles);
+        newlocations.add(opponentMovedMarbles);
+        return newlocations;
 
     }
 
@@ -181,19 +191,40 @@ public class BoardManage
     }
 
     public void MakeMove(Direction dir, ArrayList<Point> selectedmarbles, Player player){
-        ArrayList<Point> newLocationMarbles;
+        ArrayList<ArrayList<Point>> newlocations = new ArrayList<>();
+        ArrayList<Point> newLocationPlayerMarbles;
+        ArrayList<Point> newLocationOpponentMarbles;
+
         try
         {
-            newLocationMarbles = LegalMove(dir, selectedmarbles, player);
+            newlocations = LegalMove(dir, selectedmarbles, player);
+            newLocationPlayerMarbles = newlocations.get(0);
+            newLocationOpponentMarbles = newlocations.get(1);
             //if reached here, the move is legal
+
+            //push the opponent marbles
+
+            for (Point newLocationOpponentMarble : newLocationOpponentMarbles)
+            {
+                if(!IsPointInBoundsOfBoard(newLocationOpponentMarble))
+                {
+                    System.out.println("pushed out of board!");
+                }
+                else
+                    dataStructure.setSquareContent(newLocationOpponentMarble, player.getOpponent());
+            }
+
+
             //delete the marbles that have been moved
             for (Point selectedmarble : selectedmarbles) {
                 dataStructure.setSquareContent(selectedmarble, null);
             }
             // set the marbles at their new locations
-            for (Point newLocationMarble : newLocationMarbles) {
-                dataStructure.setSquareContent(newLocationMarble, Player.WHITE);
+            for (Point newLocationMarble : newLocationPlayerMarbles) {
+                dataStructure.setSquareContent(newLocationMarble, player);
             }
+
+
 
             selectedmarbles.clear();
         }
@@ -206,10 +237,9 @@ public class BoardManage
     }
 
     /**
-     * the function returns true if the given points are in the same row
      * @param p1
      * @param p2
-     * @return
+     * @return true if the given points are in the same row
      */
     public boolean IsInSameRow(Point p1, Point p2)
     {
