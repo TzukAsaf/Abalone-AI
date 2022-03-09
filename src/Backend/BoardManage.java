@@ -123,6 +123,11 @@ public class BoardManage
                     opponentMarbles++;
                     oppPointsCounter = Direction.AddOffsetToNeighbor(oppPointsCounter, dir.GetMovementOffsetByCurrentLocation(oppPointsCounter, 9));
                 }
+                if(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquareContent(oppPointsCounter) == player)
+                {
+                    selectedmarbles.clear();
+                    throw new Exception("self interrupting soldiers");
+                }
 
                 //count how many marbles the player has in this direction
                 while(IsPointInBoundsOfBoard(playerPointsCounter) && dataStructure.getSquareContent(playerPointsCounter) == player && selectedmarbles.contains(playerPointsCounter))
