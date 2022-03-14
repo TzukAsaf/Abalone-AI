@@ -1,14 +1,12 @@
 package GUI;
 
-import Backend.BoardState;
+import Backend.BoardManage;
 import enums.Direction;
 import enums.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Vector;
@@ -24,7 +22,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     private JButton reset;
     private JButton exit;
     private JButton right, left, upright, upleft, downright, downleft;
-    private  BoardState ab;
+    private BoardManage ab;
     private ArrayList<Point> selected;// the marbles that the player has selected
     private int width,height, changewidth = 55;
 
@@ -32,7 +30,7 @@ public class BoardFrame extends JFrame implements MarbleListener
      * the frame constructor
      * @param ab
      */
-    public BoardFrame(BoardState ab){
+    public BoardFrame(BoardManage ab){
 
         setLayout(null);
         width=1000;
@@ -159,6 +157,8 @@ public class BoardFrame extends JFrame implements MarbleListener
     @Override
     public void MarbleSelected(Point pos)
     {
+        if(ab.gameOver)
+            return;
         if(selected.contains(pos))
         {
             /*
@@ -171,7 +171,7 @@ public class BoardFrame extends JFrame implements MarbleListener
         else
         {
             //the selected marble hasn't been selected yet
-            if(ab.getBoard().LegalAdd(pos, selected, bp.get_panels()[pos.y][pos.x].getPlayer()))
+            if(ab.LegalAdd(pos, selected, bp.get_panels()[pos.y][pos.x].getPlayer()))
             {
                 bp.get_panels()[pos.y][pos.x].markMarble();
                 selected.add(pos);
@@ -179,41 +179,41 @@ public class BoardFrame extends JFrame implements MarbleListener
 
         }
         //System.out.println(pos);
-        System.out.println(selected);
+        //System.out.println(selected);
     }
     private void RightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.RIGHT, selected, Player.WHITE);
+        ab.MakeMove(Direction.RIGHT, selected, Player.WHITE);
         setBoard();
     }
 
     private void LeftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.LEFT, selected, Player.WHITE);
+        ab.MakeMove(Direction.LEFT, selected, Player.WHITE);
         setBoard();
     }
 
     private void UprightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.UPRIGHT, selected, Player.WHITE);
+        ab.MakeMove(Direction.UPRIGHT, selected, Player.WHITE);
         setBoard();
     }
 
     private void DownrightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.DOWNRIGHT, selected, Player.WHITE);
+        ab.MakeMove(Direction.DOWNRIGHT, selected, Player.WHITE);
         setBoard();
     }
 
     private void UpleftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.UPLEFT, selected, Player.WHITE);
+        ab.MakeMove(Direction.UPLEFT, selected, Player.WHITE);
         setBoard();
     }
 
     private void DownleftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.getBoard().MakeMove(Direction.DOWNLEFT, selected, Player.WHITE);
+        ab.MakeMove(Direction.DOWNLEFT, selected, Player.WHITE);
         setBoard();
     }
 

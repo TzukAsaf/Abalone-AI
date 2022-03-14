@@ -1,4 +1,4 @@
-import Backend.BoardState;
+import Backend.BoardManage;
 import GUI.BoardFrame;
 
 
@@ -11,7 +11,7 @@ public class Main extends JFrame
     public static void main(String[] args)
     {
 
-        BoardState abalon = new BoardState();
+        BoardManage abalon = new BoardManage();
         abalon.initBoard();
         new BoardFrame(abalon);
 

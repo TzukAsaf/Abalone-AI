@@ -14,6 +14,7 @@ public class BoardManage
     private final int kill = 20;
     private final int push = 10;
     private final int isolatedSoldier = 50;
+    public boolean gameOver = false;
     private int numOfRows;
     private int numOfColsInFirstRow;
     private BoardStructure dataStructure;
@@ -161,15 +162,6 @@ public class BoardManage
 
     }
 
-    public boolean IsBroadsideMove(ArrayList<Point> selectedmarbles)
-    {
-        for (Point selectedmarble : selectedmarbles)
-            if (selectedmarble.y != selectedmarbles.get(0).y)
-                return false;
-        return true;
-
-    }
-
     /**
      *
      * @param selectedmarbles
@@ -185,12 +177,15 @@ public class BoardManage
             newPoint = Direction.AddOffsetToNeighbor(selectedmarbles.get(i), offset.GetMovementOffsetByCurrentLocation(selectedmarbles.get(i), 9));
             marblesAfterMove.add(newPoint);
         }
-        System.out.println(marblesAfterMove);
+        //System.out.println(marblesAfterMove);
         return marblesAfterMove;
 
     }
 
-    public void MakeMove(Direction dir, ArrayList<Point> selectedmarbles, Player player){
+    public void MakeMove(Direction dir, ArrayList<Point> selectedmarbles, Player player)
+    {
+        if(gameOver)
+            return;
         ArrayList<ArrayList<Point>> newlocations = new ArrayList<>();
         ArrayList<Point> newLocationPlayerMarbles;
         ArrayList<Point> newLocationOpponentMarbles;
@@ -208,7 +203,14 @@ public class BoardManage
             {
                 if(!IsPointInBoundsOfBoard(newLocationOpponentMarble))
                 {
-                    System.out.println("pushed out of board!");
+                    dataStructure.decNumOfSoldiersOfPlayer(player.getOpponent());
+                    System.out.printf("pushed out of board!\nwhite: %d\nblack: %d\n", 14 - dataStructure.getNumOfMarbles(Player.WHITE), 14 - dataStructure.getNumOfMarbles(Player.BLACK));
+                    if(Won(player))
+                    {
+                        System.out.println(player.GetPlayer() + " won!");
+                        gameOver = true;
+
+                    }
                 }
                 else
                     dataStructure.setSquareContent(newLocationOpponentMarble, player.getOpponent());
@@ -233,6 +235,17 @@ public class BoardManage
             System.out.println(e.getMessage());
         }
 
+
+    }
+
+    /**
+     * @param player
+     * @return true if the opponent lost 6 marbles remaining, in other words he lost.
+     *
+     */
+    public boolean Won(Player player)
+    {
+        return  (14 - dataStructure.getNumOfMarbles(player.getOpponent())) >= 6;
 
     }
 

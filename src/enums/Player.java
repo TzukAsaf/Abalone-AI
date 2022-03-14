@@ -13,6 +13,14 @@ public enum Player
             return WHITE;
         return null;
     }
+    public String GetPlayer()
+    {
+        if(this == Player.WHITE)
+            return "White";
+        return "Black";
+    }
+
+
 
 
 }

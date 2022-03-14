@@ -127,7 +127,7 @@ public class BoardStructure
         return null;
     }
 
-    private void addSoldierToPos(Point pos, Player player) {
+    public void addSoldierToPos(Point pos, Player player) {
         if (player != null) {
             dataSet[pos.y][pos.x] = new MarbleManage(player);
             incNumOfSoldiersOfPlayer(player);
@@ -137,12 +137,21 @@ public class BoardStructure
     }
 
 
-    private void incNumOfSoldiersOfPlayer(Player p) {
+    public void incNumOfSoldiersOfPlayer(Player p) {
         if (p == Player.WHITE) {
             numOfWhites++;
         }
         if (p == Player.BLACK) {
             numOfBlacks++;
+        }
+    }
+
+    public void decNumOfSoldiersOfPlayer(Player p) {
+        if (p == Player.WHITE) {
+            numOfWhites--;
+        }
+        if (p == Player.BLACK) {
+            numOfBlacks--;
         }
     }
 
@@ -155,15 +164,13 @@ public class BoardStructure
     }
 
     // getters and setters
-    public int get_numOfWhites() {
-        return numOfWhites;
-    }
-
-
-
-    public int get_numOfBlacks() {
+    public int getNumOfMarbles(Player player)
+    {
+        if(player == Player.WHITE)
+            return numOfWhites;
         return numOfBlacks;
     }
+
 
     public Player[][] boardDescription() {
         Player[][] boardLayout = new Player[size][size];
