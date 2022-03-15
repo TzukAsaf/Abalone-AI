@@ -128,8 +128,9 @@ public class BoardManage
                 while(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquareContent(oppPointsCounter) == player.getOpponent())
                 {
                     opponentMarbles++;
+                    opponentMovedMarbles.add(oppPointsCounter);
                     oppPointsCounter = Direction.AddOffsetToNeighbor(oppPointsCounter, dir.GetMovementOffsetByCurrentLocation(oppPointsCounter, 9));
-                    opponentMovedMarbles.add(newLocationMarbles.get(i));
+
                 }
                 //if true, that means that a player's marble is in the way, like sandwich. thus, don't allow the move
                 if(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquareContent(oppPointsCounter) == player)
@@ -156,6 +157,7 @@ public class BoardManage
 
         }
         opponentMovedMarbles = NewLocations(opponentMovedMarbles, dir);
+        //System.out.println("\nmy locations: " + newLocationMarbles+"\nenemy locations: " + opponentMovedMarbles);
         newlocations.add(newLocationMarbles);
         newlocations.add(opponentMovedMarbles);
         return newlocations;
@@ -204,7 +206,9 @@ public class BoardManage
                 if(!IsPointInBoundsOfBoard(newLocationOpponentMarble))
                 {
                     dataStructure.decNumOfSoldiersOfPlayer(player.getOpponent());
-                    System.out.printf("pushed out of board!\nwhite: %d\nblack: %d\n", 14 - dataStructure.getNumOfMarbles(Player.WHITE), 14 - dataStructure.getNumOfMarbles(Player.BLACK));
+                    assert player.getOpponent() != null;
+                    System.out.printf("%s got pushed out of board!\n", player.getOpponent().GetPlayer());
+                    System.out.printf("First to get to 6 lose\nwhite: %d\nblack: %d\n", 14 - dataStructure.getNumOfMarbles(Player.WHITE), 14 - dataStructure.getNumOfMarbles(Player.BLACK));
                     if(Won(player))
                     {
                         System.out.println(player.GetPlayer() + " won!");
@@ -230,10 +234,12 @@ public class BoardManage
 
             selectedmarbles.clear();
         }
+
         catch (Exception e)
         {
             System.out.println(e.getMessage());
         }
+
 
 
     }
