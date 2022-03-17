@@ -162,7 +162,17 @@ public class BoardManage
     }
 
 
-    ArrayList<ArrayList<Point>> newlocations = new ArrayList<>();
+    ArrayList<ArrayList<Point>> newlocations = new ArrayList<>();//global variable. used for the function "LegalAIMove" to keep it boolean
+
+    /**
+     * had to make another "Legality checking" function, for the AI, because the first one throws
+     * exceptions if the move isn't good. but when the pc is generating possibilities, exceptions
+     * are not necessary, and we will just want to get "False" if the move is illegal
+     * @param dir
+     * @param selectedmarbles
+     * @param player
+     * @return true if the move is legal for the board
+     */
     public boolean LegalAIMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player)
     {
         int playerMarbles, opponentMarbles;
@@ -326,12 +336,23 @@ public class BoardManage
 
     }
 
+    /**
+     * the function is responsible for applying the best next board pn the real one
+     */
     public void MakeAIMove()
     {
         dataStructure = GetAllPossibleBoards(dataStructure).get(7);
 
     }
 
+    /**
+     * the function gets a board and updates him after a move was made
+     * the board is not the real game board:
+     * the function is relevant only for choosing the next best board for the AI
+     * so this board will get into list of possible boards
+     * @param curBoard
+     * @param marbles
+     */
     public void checkAIMove(BoardStructure curBoard, ArrayList<Point> marbles)
     {
 
