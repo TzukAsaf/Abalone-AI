@@ -149,6 +149,17 @@ public class BoardFrame extends JFrame implements MarbleListener
         repaint();
     }
 
+    public void aiMove()
+    {
+        if(ab.computerTurn)
+        {
+            ab.MakeAIMove();
+            setBoard();
+        }
+
+        ab.computerTurn = false;
+    }
+
 
     /**
      * the function is in charge of managing the event of clicking a marble
@@ -157,7 +168,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     @Override
     public void MarbleSelected(Point pos)
     {
-        if(ab.gameOver)
+        if(ab.gameOver /*|| ab.computerTurn*/)
             return;
         if(selected.contains(pos))
         {
@@ -185,36 +196,42 @@ public class BoardFrame extends JFrame implements MarbleListener
     {
         ab.MakeMove(Direction.RIGHT, selected, Player.WHITE);
         setBoard();
+        aiMove();
     }
 
     private void LeftActionPerformed(java.awt.event.ActionEvent evt)
     {
         ab.MakeMove(Direction.LEFT, selected, Player.WHITE);
         setBoard();
+        aiMove();
     }
 
     private void UprightActionPerformed(java.awt.event.ActionEvent evt)
     {
         ab.MakeMove(Direction.UPRIGHT, selected, Player.WHITE);
         setBoard();
+        aiMove();
     }
 
     private void DownrightActionPerformed(java.awt.event.ActionEvent evt)
     {
         ab.MakeMove(Direction.DOWNRIGHT, selected, Player.WHITE);
         setBoard();
+        aiMove();
     }
 
     private void UpleftActionPerformed(java.awt.event.ActionEvent evt)
     {
         ab.MakeMove(Direction.UPLEFT, selected, Player.WHITE);
         setBoard();
+        aiMove();
     }
 
     private void DownleftActionPerformed(java.awt.event.ActionEvent evt)
     {
         ab.MakeMove(Direction.DOWNLEFT, selected, Player.WHITE);
         setBoard();
+        aiMove();
     }
 
 }

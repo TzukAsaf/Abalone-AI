@@ -9,15 +9,11 @@ import java.util.ArrayList;
 public class BoardManage
 {
     //the class is in charge of defining the game's rules
-    private final int minNumberOfSoldiers = 7;
-    private final int maxNumberOfSoldiersToMove = 3;
-    private final int kill = 20;
-    private final int push = 10;
-    private final int isolatedSoldier = 50;
     public boolean gameOver = false;
-    private int numOfRows;
-    private int numOfColsInFirstRow;
+    public int numOfRows;
+    public int numOfColsInFirstRow;
     private BoardStructure dataStructure;
+    public boolean computerTurn = false;
 
     public BoardManage() {
         this.numOfRows = 9;
@@ -82,7 +78,8 @@ public class BoardManage
      * @return the new locations of the marbles, if the selected marbles can be legally moved to the desired direction. throws exception otherwise
      * @throws Exception
      */
-    public ArrayList<ArrayList<Point>> LegalMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player) throws Exception {
+    public ArrayList<ArrayList<Point>> LegalMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player) throws Exception
+    {
         int playerMarbles, opponentMarbles;
         Point oppPointsCounter;
         Point playerPointsCounter;
@@ -164,6 +161,90 @@ public class BoardManage
 
     }
 
+
+    ArrayList<ArrayList<Point>> newlocations = new ArrayList<>();
+    public boolean LegalAIMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player)
+    {
+        int playerMarbles, opponentMarbles;
+        Point oppPointsCounter;
+        Point playerPointsCounter;
+        ArrayList<Point> opponentMovedMarbles = new ArrayList<>();
+
+        // arraylist of arraylists, the first element is the locations of the player's marble after a move
+        //and the second element is the location of the opponent's marbles after the player's move
+
+        if(selectedmarbles.isEmpty())
+        {
+            return false;
+        }
+        ArrayList<Point> newLocationMarbles = NewLocations(selectedmarbles, dir);
+
+        for (int i = 0; i < newLocationMarbles.size(); i++)
+        {
+            opponentMarbles = 0;
+            playerMarbles = 0;
+            // if player tries to move out of the board
+            if (!IsPointInBoundsOfBoard(newLocationMarbles.get(i)))
+            {
+                return false;
+            }
+
+            // if player tries to move to a square which is occupied by him
+            /*explanation for the second condition: in a diagonal move of above 2 marbles, at least one of the marble's new location
+            is a location which is occupied by another selected marble, but that marble will free the spot after the move.
+            so we want to pass a situation where the new location is a location that now is occupied, but will get free*/
+            if(dataStructure.getSquareContent(newLocationMarbles.get(i)) == dataStructure.getSquareContent(selectedmarbles.get(0)) && !selectedmarbles.contains(newLocationMarbles.get(i)))
+            {
+                return false;
+            }
+
+            //if one of the new location is occupied by enemy's marble, we need to check if a push can be made
+            if(dataStructure.getSquareContent(newLocationMarbles.get(i)) == player.getOpponent())
+            {
+                oppPointsCounter = newLocationMarbles.get(i);
+                playerPointsCounter = selectedmarbles.get(i);
+                //count how many marbles the opponent has in this direction
+                while(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquareContent(oppPointsCounter) == player.getOpponent())
+                {
+                    opponentMarbles++;
+                    opponentMovedMarbles.add(oppPointsCounter);
+                    oppPointsCounter = Direction.AddOffsetToNeighbor(oppPointsCounter, dir.GetMovementOffsetByCurrentLocation(oppPointsCounter, 9));
+
+                }
+                //if true, that means that a player's marble is in the way, like sandwich. thus, don't allow the move
+                if(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquareContent(oppPointsCounter) == player)
+                {
+                    return false;
+                }
+
+                //count how many marbles the player has in this direction
+                while(IsPointInBoundsOfBoard(playerPointsCounter) && dataStructure.getSquareContent(playerPointsCounter) == player && selectedmarbles.contains(playerPointsCounter))
+                {
+                    playerMarbles++;
+                    playerPointsCounter = Direction.AddOffsetToNeighbor(playerPointsCounter, dir.GetOppositeDir().GetMovementOffsetByCurrentLocation(playerPointsCounter, 9));
+                }
+
+                if(opponentMarbles >= playerMarbles)
+                {
+                    return false;
+                }
+
+            }
+
+
+        }
+        opponentMovedMarbles = NewLocations(opponentMovedMarbles, dir);
+        //System.out.println("\nmy locations: " + newLocationMarbles+"\nenemy locations: " + opponentMovedMarbles);
+        newlocations.add(newLocationMarbles);
+        newlocations.add(opponentMovedMarbles);
+        return true;
+
+    }
+
+
+
+
+
     /**
      *
      * @param selectedmarbles
@@ -233,6 +314,7 @@ public class BoardManage
 
 
             selectedmarbles.clear();
+            computerTurn = true;
         }
 
         catch (Exception e)
@@ -242,6 +324,64 @@ public class BoardManage
 
 
 
+    }
+
+    public void MakeAIMove()
+    {
+        dataStructure = GetAllPossibleBoards(dataStructure).get(7);
+
+    }
+
+    public void checkAIMove(BoardStructure curBoard, ArrayList<Point> marbles)
+    {
+
+        ArrayList<Point> newLocationPlayerMarbles;
+        ArrayList<Point> newLocationOpponentMarbles;
+        newLocationPlayerMarbles = newlocations.get(0);
+        newLocationOpponentMarbles = newlocations.get(1);
+
+        //set the enemy's marbles
+        for (Point newLocationOpponentMarble : newLocationOpponentMarbles)
+        {
+            curBoard.setSquareContent(newLocationOpponentMarble, Player.WHITE);
+        }
+        //delete the marbles that have been moved
+        for (Point selectedmarble : marbles) {
+            curBoard.setSquareContent(selectedmarble, null);
+        }
+        // set the marbles at their new locations
+        for (Point newLocationMarble : newLocationPlayerMarbles) {
+            curBoard.setSquareContent(newLocationMarble, Player.BLACK);
+        }
+        newlocations.clear();
+
+    }
+
+
+
+    public ArrayList<BoardStructure> GetAllPossibleBoards(BoardStructure curBoard)
+    {
+        ArrayList<BoardStructure> boards = new ArrayList<>();
+        ArrayList<Point> marblesLocations = curBoard.GetMarblesLocations(Player.BLACK);
+        ArrayList<Point> marbles = new ArrayList<>();
+
+        BoardStructure tempBoard;
+        for (int i = 0; i < marblesLocations.size();i++)
+        {
+            marbles.add(marblesLocations.get(i));
+            for (Direction d : Direction.values())
+            {
+                tempBoard = new BoardStructure(curBoard);
+                if (LegalAIMove(d, marbles, Player.BLACK))
+                {
+                    checkAIMove(tempBoard, marbles);
+                    boards.add(tempBoard);
+                }
+            }
+            marbles.clear();
+        }
+        System.out.println(boards.size());
+        return boards;
     }
 
     /**

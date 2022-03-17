@@ -3,15 +3,14 @@ package Backend;
 import enums.Player;
 
 import java.awt.*;
+import java.util.ArrayList;
 
-public class BoardStructure
-{
+public class BoardStructure {
     private int size;
     private int numOfColsInFirstRow;
     private int numOfWhites;
     private int numOfBlacks;
     private MarbleManage[][] dataSet;
-
 
 
     public BoardStructure() {
@@ -21,8 +20,9 @@ public class BoardStructure
     }
 
 
-    public BoardStructure(BoardStructure dataStructure)
-    {
+
+
+    public BoardStructure(BoardStructure dataStructure) {
         //clone the board stats
         this.size = dataStructure.size;
         this.numOfBlacks = dataStructure.numOfBlacks;
@@ -49,8 +49,7 @@ public class BoardStructure
     /**
      * @return the type of the player in the given point
      */
-    public Player getSquareContent(Point pos)
-    {
+    public Player getSquareContent(Point pos) {
 
         if (dataSet[pos.y][pos.x] != null) {
             return dataSet[pos.y][pos.x].getPlayer();
@@ -93,8 +92,7 @@ public class BoardStructure
         Player soldier;
         // all the rows except the middle row
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < colsInRow; j++)
-            {
+            for (int j = 0; j < colsInRow; j++) {
                 //the upper part of the hexagon
                 pos = new Point(j, i);
                 soldier = soldierInPos(pos);
@@ -114,6 +112,7 @@ public class BoardStructure
             addSoldierToPos(pos, soldier);
         }
     }
+
     private Player soldierInPos(Point pos) {
         // if first or second row
         if (pos.y == 0 || pos.y == 1 || (pos.y == 2 && pos.x > 1 && pos.x < 5)) {
@@ -164,9 +163,8 @@ public class BoardStructure
     }
 
     // getters and setters
-    public int getNumOfMarbles(Player player)
-    {
-        if(player == Player.WHITE)
+    public int getNumOfMarbles(Player player) {
+        if (player == Player.WHITE)
             return numOfWhites;
         return numOfBlacks;
     }
@@ -195,5 +193,20 @@ public class BoardStructure
         return boardLayout;
     }
 
+    public ArrayList<Point> GetMarblesLocations(Player player) {
 
+        ArrayList<Point> locations = new ArrayList<>();
+        Player[][] board = this.boardDescription();
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if(board[i][j] == player)
+                {
+                    locations.add(new Point(j,i));
+                }
+            }
+        }
+        return locations;
+    }
 }
