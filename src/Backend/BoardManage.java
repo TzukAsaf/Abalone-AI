@@ -173,7 +173,7 @@ public class BoardManage
      * @param player
      * @return true if the move is legal for the board
      */
-    public boolean LegalAIMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player)
+    public boolean LegalAIMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player, BoardStructure board)
     {
         int playerMarbles, opponentMarbles;
         Point oppPointsCounter;
@@ -203,18 +203,18 @@ public class BoardManage
             /*explanation for the second condition: in a diagonal move of above 2 marbles, at least one of the marble's new location
             is a location which is occupied by another selected marble, but that marble will free the spot after the move.
             so we want to pass a situation where the new location is a location that now is occupied, but will get free*/
-            if(dataStructure.getSquareContent(newLocationMarbles.get(i)) == dataStructure.getSquareContent(selectedmarbles.get(0)) && !selectedmarbles.contains(newLocationMarbles.get(i)))
+            if(board.getSquareContent(newLocationMarbles.get(i)) == board.getSquareContent(selectedmarbles.get(0)) && !selectedmarbles.contains(newLocationMarbles.get(i)))
             {
                 return false;
             }
 
             //if one of the new location is occupied by enemy's marble, we need to check if a push can be made
-            if(dataStructure.getSquareContent(newLocationMarbles.get(i)) == player.getOpponent())
+            if(board.getSquareContent(newLocationMarbles.get(i)) == player.getOpponent())
             {
                 oppPointsCounter = newLocationMarbles.get(i);
                 playerPointsCounter = selectedmarbles.get(i);
                 //count how many marbles the opponent has in this direction
-                while(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquareContent(oppPointsCounter) == player.getOpponent())
+                while(IsPointInBoundsOfBoard(oppPointsCounter) && board.getSquareContent(oppPointsCounter) == player.getOpponent())
                 {
                     opponentMarbles++;
                     opponentMovedMarbles.add(oppPointsCounter);
@@ -222,13 +222,13 @@ public class BoardManage
 
                 }
                 //if true, that means that a player's marble is in the way, like sandwich. thus, don't allow the move
-                if(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquareContent(oppPointsCounter) == player)
+                if(IsPointInBoundsOfBoard(oppPointsCounter) && board.getSquareContent(oppPointsCounter) == player)
                 {
                     return false;
                 }
 
                 //count how many marbles the player has in this direction
-                while(IsPointInBoundsOfBoard(playerPointsCounter) && dataStructure.getSquareContent(playerPointsCounter) == player && selectedmarbles.contains(playerPointsCounter))
+                while(IsPointInBoundsOfBoard(playerPointsCounter) && board.getSquareContent(playerPointsCounter) == player && selectedmarbles.contains(playerPointsCounter))
                 {
                     playerMarbles++;
                     playerPointsCounter = Direction.AddOffsetToNeighbor(playerPointsCounter, dir.GetOppositeDir().GetMovementOffsetByCurrentLocation(playerPointsCounter, 9));
@@ -337,17 +337,17 @@ public class BoardManage
     }
 
     /**
-     * the function is responsible for applying the best next board pn the real one
+     * the function is responsible for applying the best next board on the real one
      */
     public void MakeAIMove()
     {
-        dataStructure = GetAllPossibleBoards(dataStructure).get(7);
+        dataStructure = GetAllPossibleBoards(dataStructure).get(40);
 
     }
 
     /**
      * the function gets a board and updates him after a move was made
-     * the board is not the real game board:
+     * IMPORTANT: the board is not the real game board:
      * the function is relevant only for choosing the next best board for the AI
      * so this board will get into list of possible boards
      * @param curBoard
@@ -364,7 +364,13 @@ public class BoardManage
         //set the enemy's marbles
         for (Point newLocationOpponentMarble : newLocationOpponentMarbles)
         {
-            curBoard.setSquareContent(newLocationOpponentMarble, Player.WHITE);
+            if(!IsPointInBoundsOfBoard(newLocationOpponentMarble))
+            {
+                curBoard.decNumOfSoldiersOfPlayer(Player.WHITE);
+
+            }
+            else
+                curBoard.setSquareContent(newLocationOpponentMarble, Player.WHITE);
         }
         //delete the marbles that have been moved
         for (Point selectedmarble : marbles) {
@@ -374,7 +380,6 @@ public class BoardManage
         for (Point newLocationMarble : newLocationPlayerMarbles) {
             curBoard.setSquareContent(newLocationMarble, Player.BLACK);
         }
-        newlocations.clear();
 
     }
 
@@ -390,13 +395,31 @@ public class BoardManage
         for (int i = 0; i < marblesLocations.size();i++)
         {
             marbles.add(marblesLocations.get(i));
+            //all the possible one marble moves
             for (Direction d : Direction.values())
             {
                 tempBoard = new BoardStructure(curBoard);
-                if (LegalAIMove(d, marbles, Player.BLACK))
+                newlocations.clear();
+                if (LegalAIMove(d, marbles, Player.BLACK, tempBoard))
                 {
                     checkAIMove(tempBoard, marbles);
                     boards.add(tempBoard);
+                }
+                marbles = NeighborFromDir(d, marbles.get(0), curBoard);
+                if(marbles.size() == 2)
+                {
+                    //if the size is 1, that means that the second marble was out of bound for this direction
+                    for (Direction d2 : Direction.values())
+                    {
+                        tempBoard = new BoardStructure(curBoard);
+                        newlocations.clear();
+                        if(LegalAIMove(d2, marbles, Player.BLACK, tempBoard))
+                        {
+                            checkAIMove(tempBoard, marbles);
+                            boards.add(tempBoard);
+                        }
+                    }
+
                 }
             }
             marbles.clear();
@@ -404,6 +427,22 @@ public class BoardManage
         System.out.println(boards.size());
         return boards;
     }
+    /**
+     *
+     * @param dir
+     * @param point
+     * @return array list contains the original point, and a neighbor point in the given direction
+     */
+    public ArrayList<Point> NeighborFromDir(Direction dir, Point point, BoardStructure board)
+    {
+        ArrayList<Point> twoPoints = new ArrayList<>();
+        twoPoints.add(point);
+        Point secondPoint = Direction.AddOffsetToNeighbor(point, dir.GetMovementOffsetByCurrentLocation(point, 9));
+        if(IsPointInBoundsOfBoard(secondPoint) && board.getSquareContent(secondPoint) == Player.BLACK)
+            twoPoints.add(secondPoint);
+        return twoPoints;
+    }
+
 
     /**
      * @param player
@@ -452,7 +491,7 @@ public class BoardManage
         return -(rowNum - (numOfRows - 1)) + 5;
     }
 
-    private boolean IsPointInBoundsOfBoard(Point pos) {
+    public boolean IsPointInBoundsOfBoard(Point pos) {
         return pos.y > -1 && pos.y < numOfRows && pos.x > -1
                 && pos.x < numOfColsInRow(pos.y);
     }

@@ -106,5 +106,4 @@ public enum Direction
         return false;
     }
 
-
 }
