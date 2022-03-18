@@ -341,7 +341,7 @@ public class BoardManage
      */
     public void MakeAIMove()
     {
-        dataStructure = GetAllPossibleBoards(dataStructure).get(40);
+        dataStructure = GetAllPossibleBoards(dataStructure).get(14);
 
     }
 
@@ -405,6 +405,7 @@ public class BoardManage
                     checkAIMove(tempBoard, marbles);
                     boards.add(tempBoard);
                 }
+                //from the selected one marble: search for a friendly neighbor. if found, scan all the direction for a legal move
                 marbles = NeighborFromDir(d, marbles.get(0), curBoard);
                 if(marbles.size() == 2)
                 {
@@ -419,16 +420,31 @@ public class BoardManage
                             boards.add(tempBoard);
                         }
                     }
+                    //from the two marbles, search for a third friendly marble in the same direction of the 2nd
+                    marbles = ThreeNeighbors(d,marbles, tempBoard);
+                    if(marbles.size() == 3)
+                    {
+                        for (Direction d3 : Direction.values())
+                        {
+                            tempBoard = new BoardStructure(curBoard);
+                            newlocations.clear();
+                            if(LegalAIMove(d3, marbles, Player.BLACK, tempBoard))
+                            {
+                                checkAIMove(tempBoard, marbles);
+                                boards.add(tempBoard);
+                            }
+                        }
+
+                    }
 
                 }
             }
             marbles.clear();
         }
-        System.out.println(boards.size());
+        System.out.println("amount of possibilities for AI: " + boards.size());
         return boards;
     }
     /**
-     *
      * @param dir
      * @param point
      * @return array list contains the original point, and a neighbor point in the given direction
@@ -441,6 +457,22 @@ public class BoardManage
         if(IsPointInBoundsOfBoard(secondPoint) && board.getSquareContent(secondPoint) == Player.BLACK)
             twoPoints.add(secondPoint);
         return twoPoints;
+    }
+
+    /**
+     * @param dir
+     * @param points
+     * @param board
+     * @return array list with original two points, and third point which is a neighbor of the others
+     * in the same direction. if out of bounds, or there is no marble there, don't add anything.
+     */
+    public ArrayList<Point> ThreeNeighbors(Direction dir, ArrayList<Point>  points, BoardStructure board)
+    {
+
+        Point thirdPoint = Direction.AddOffsetToNeighbor(points.get(1), dir.GetMovementOffsetByCurrentLocation(points.get(1), 9));
+        if(IsPointInBoundsOfBoard(thirdPoint) && board.getSquareContent(thirdPoint) == Player.BLACK)
+            points.add(thirdPoint);
+        return points;
     }
 
 
