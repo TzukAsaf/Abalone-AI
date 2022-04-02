@@ -1,5 +1,7 @@
 package Backend;
 
+import AI.Evaluate;
+import AI.Node;
 import enums.Direction;
 import enums.Player;
 
@@ -14,18 +16,21 @@ public class BoardManage
     public int numOfColsInFirstRow;
     private BoardStructure dataStructure;
     public boolean computerTurn = false;
+    Evaluate evaluate;
+    private int level;
 
     public BoardManage() {
         this.numOfRows = 9;
         numOfColsInFirstRow = 5;
         dataStructure = new BoardStructure();
+        level = 2;
     }
 
-    public BoardManage(BoardManage board)
+    public BoardManage(BoardStructure board)
     {
-        numOfRows = board.numOfRows;
-        numOfColsInFirstRow = board.numOfColsInFirstRow;
-        dataStructure = new BoardStructure(board.dataStructure);
+        numOfRows = 9;
+        numOfColsInFirstRow = 5;
+        dataStructure = new BoardStructure(board);
     }
 
 
@@ -336,14 +341,6 @@ public class BoardManage
 
     }
 
-    /**
-     * the function is responsible for applying the best next board on the real one
-     */
-    public void MakeAIMove()
-    {
-        dataStructure = GetAllPossibleBoards(dataStructure).get(14);
-
-    }
 
     /**
      * the function gets a board and updates him after a move was made
@@ -403,6 +400,7 @@ public class BoardManage
                 if (LegalAIMove(d, marbles, Player.BLACK, tempBoard))
                 {
                     checkAIMove(tempBoard, marbles);
+                    evaluate = new Evaluate(tempBoard, this);
                     boards.add(tempBoard);
                 }
                 //from the selected one marble: search for a friendly neighbor. if found, scan all the direction for a legal move
@@ -417,6 +415,7 @@ public class BoardManage
                         if(LegalAIMove(d2, marbles, Player.BLACK, tempBoard))
                         {
                             checkAIMove(tempBoard, marbles);
+                            evaluate = new Evaluate(tempBoard, this);
                             boards.add(tempBoard);
                         }
                     }
@@ -431,6 +430,7 @@ public class BoardManage
                             if(LegalAIMove(d3, marbles, Player.BLACK, tempBoard))
                             {
                                 checkAIMove(tempBoard, marbles);
+                                evaluate = new Evaluate(tempBoard, this);
                                 boards.add(tempBoard);
                             }
                         }
@@ -441,9 +441,102 @@ public class BoardManage
             }
             marbles.clear();
         }
-        System.out.println("amount of possibilities for AI: " + boards.size());
         return boards;
     }
+
+    /**
+     * sets the children of a node
+     * A child means a possible board from the current one
+     * @param node
+     * @param level
+     */
+    private void SetChildren(Node node, int level)
+    {
+        ArrayList<BoardStructure> possibleBoards = GetAllPossibleBoards(node.GetBoard());
+        for (BoardStructure board : possibleBoards) {
+            Node child = new Node(board);
+            node.AddChild(child);
+        }
+        level--;
+        if (level > 0) {
+            for (Node child : node.GetChildren()) {
+                SetChildren(child, level);
+            }
+        }
+    }
+
+    private Node SetupTree() {
+        Node root = new Node(dataStructure);
+        SetChildren(root, level);
+        return root;
+    }
+
+    private double Minimax(Node node)
+    {
+        Player player = computerTurn ? Player.BLACK:Player.WHITE;
+        if(node.HasChildren())
+        {
+            double minMaxOfChildren = Minimax(node.GetChildren().get(0));
+            if(player == Player.BLACK)
+            {
+                for(Node child : node.GetChildren())
+                {
+                    double currentValue = Minimax(child);
+                    if(currentValue < minMaxOfChildren)
+                        minMaxOfChildren = currentValue;
+                }
+            }
+            else
+            {
+                for (Node child : node.GetChildren()) {
+                    double currentValue = Minimax(child);
+                    if (currentValue > minMaxOfChildren) {
+                        minMaxOfChildren = currentValue;
+                    }
+                }
+            }
+            return evaluate.evaluateAllBoard(node.GetBoard()) + minMaxOfChildren;
+        }
+        else
+            return evaluate.evaluateAllBoard(node.GetBoard());
+    }
+
+    private Node GetBestBoard(Node root)
+    {
+        Node bestNode = root.GetChildren().get(0);
+        double bestEvaluation = Minimax(bestNode);
+        //choose the best node from the children
+        for (Node node : root.GetChildren()) {
+            double newValue = Minimax(node);
+            if (newValue > bestEvaluation) {
+                bestNode = node;
+                bestEvaluation = newValue;
+            }
+        }
+        return bestNode;
+    }
+
+    /**
+     * the function is responsible for applying the best next board on the real one
+     */
+    public void MakeAIMove()
+    {
+        BoardStructure keepOld = new BoardStructure(dataStructure);
+        dataStructure = GetBestBoard(SetupTree()).GetBoard();
+        if(keepOld.numOfWhites != dataStructure.numOfWhites)
+        {
+            System.out.printf("%s got pushed out of board!\n", Player.WHITE.GetPlayer());
+            System.out.printf("First to get to 6 lose\nwhite: %d\nblack: %d\n", 14 - dataStructure.getNumOfMarbles(Player.WHITE), 14 - dataStructure.getNumOfMarbles(Player.BLACK));
+            if(Won(Player.BLACK))
+            {
+                System.out.println(Player.BLACK.GetPlayer() + " won!");
+                gameOver = true;
+
+            }
+        }
+    }
+
+
     /**
      * @param dir
      * @param point

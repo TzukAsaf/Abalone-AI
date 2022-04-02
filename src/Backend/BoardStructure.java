@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class BoardStructure {
     private int size;
     private int numOfColsInFirstRow;
-    private int numOfWhites;
-    private int numOfBlacks;
+    public int numOfWhites;
+    public int numOfBlacks;
     private MarbleManage[][] dataSet;
 
 
