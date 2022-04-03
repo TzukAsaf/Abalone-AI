@@ -465,28 +465,45 @@ public class BoardManage
         return root;
     }
 
-    private double Minimax(Node node)
+    private double MinimaxAlphaBeta(Node node, double alpha, double beta)
     {
         Player player = computerTurn ? Player.BLACK:Player.WHITE;
         if(node.HasChildren())
         {
-            double minMaxOfChildren = Minimax(node.GetChildren().get(0));
+            double minMaxOfChildren = MinimaxAlphaBeta(node.GetChildren().get(0), alpha, beta);
             if(player == Player.BLACK)
             {
                 for(Node child : node.GetChildren())
                 {
-                    double currentValue = Minimax(child);
+                    double currentValue = MinimaxAlphaBeta(child, alpha, beta);
                     if(currentValue < minMaxOfChildren)
                         minMaxOfChildren = currentValue;
+                    if(currentValue > alpha)
+                        alpha = currentValue;
+
+                    if(alpha >= beta)
+                    {
+                        node.GetChildren().remove(child);
+                        break;
+                    }
                 }
             }
             else
             {
-                for (Node child : node.GetChildren()) {
-                    double currentValue = Minimax(child);
-                    if (currentValue > minMaxOfChildren) {
+                for (Node child : node.GetChildren())
+                {
+                    double currentValue = MinimaxAlphaBeta(child, alpha, beta);
+                    if (currentValue > minMaxOfChildren)
                         minMaxOfChildren = currentValue;
+                    if(currentValue < beta)
+                        beta = currentValue;
+                    if(alpha >= beta)
+                    {
+                        node.GetChildren().remove(child);
+                        break;
                     }
+
+
                 }
             }
             return evaluate.evaluateAllBoard(node.GetBoard()) + minMaxOfChildren;
@@ -498,10 +515,10 @@ public class BoardManage
     private Node GetBestBoard(Node root)
     {
         Node bestNode = root.GetChildren().get(0);
-        double bestEvaluation = Minimax(bestNode);
+        double bestEvaluation = MinimaxAlphaBeta(bestNode, Double.MIN_VALUE, Double.MAX_VALUE);
         //choose the best node from the children
         for (Node node : root.GetChildren()) {
-            double newValue = Minimax(node);
+            double newValue = MinimaxAlphaBeta(node, Double.MIN_VALUE, Double.MAX_VALUE);
             if (newValue > bestEvaluation) {
                 bestNode = node;
                 bestEvaluation = newValue;
