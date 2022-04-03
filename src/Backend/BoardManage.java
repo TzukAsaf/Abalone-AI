@@ -26,12 +26,6 @@ public class BoardManage
         level = 2;
     }
 
-    public BoardManage(BoardStructure board)
-    {
-        numOfRows = 9;
-        numOfColsInFirstRow = 5;
-        dataStructure = new BoardStructure(board);
-    }
 
 
     /**
