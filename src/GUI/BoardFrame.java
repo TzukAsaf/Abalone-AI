@@ -9,18 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Vector;
 
 public class BoardFrame extends JFrame implements MarbleListener
 {
     private BoardPanel bp;
-    //private AbalonBoardGame ab;
-    //private GameBoardAI<Board<AbalonBoardDataStructure, AbalonSoldier[][]>> _ai;
-    private Point source,dest;
-    private Vector<Point> points;
-    private Player winner;
-    private JButton reset;
-    private JButton exit;
     private JButton right, left, upright, upleft, downright, downleft;
     private BoardManage ab;
     private ArrayList<Point> selected;// the marbles that the player has selected
@@ -45,8 +37,7 @@ public class BoardFrame extends JFrame implements MarbleListener
         selected = new ArrayList<>();
         add(bp);
         bp.setBounds(0, 0, width, height);
-        source = dest = null;
-        winner = null;
+
 
         left = new JButton();
         right = new JButton();;
