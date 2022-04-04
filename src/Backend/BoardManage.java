@@ -7,6 +7,8 @@ import enums.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
 
 public class BoardManage
 {
@@ -18,12 +20,14 @@ public class BoardManage
     public boolean computerTurn = false;
     Evaluate evaluate;
     private int level;
+    public Stack<BoardStructure> undoStack;
 
     public BoardManage() {
         this.numOfRows = 9;
         numOfColsInFirstRow = 5;
         dataStructure = new BoardStructure();
         level = 2;
+        undoStack = new Stack<>();
     }
 
 
@@ -288,9 +292,9 @@ public class BoardManage
             newLocationPlayerMarbles = newlocations.get(0);
             newLocationOpponentMarbles = newlocations.get(1);
             //if reached here, the move is legal
-
+            BoardStructure tempBoard = new BoardStructure(dataStructure);
+            undoStack.push(tempBoard);
             //push the opponent marbles
-
             for (Point newLocationOpponentMarble : newLocationOpponentMarbles)
             {
                 if(!IsPointInBoundsOfBoard(newLocationOpponentMarble))
@@ -333,6 +337,12 @@ public class BoardManage
 
 
 
+    }
+
+    public void Undo()
+    {
+        if(!undoStack.isEmpty())
+            dataStructure = undoStack.pop();
     }
 
 

@@ -13,7 +13,7 @@ import java.util.Objects;
 public class BoardFrame extends JFrame implements MarbleListener
 {
     private BoardPanel bp;
-    private JButton right, left, upright, upleft, downright, downleft;
+    private JButton right, left, upright, upleft, downright, downleft, undo;
     private BoardManage ab;
     private ArrayList<Point> selected;// the marbles that the player has selected
     private int width,height, changewidth = 55;
@@ -46,6 +46,8 @@ public class BoardFrame extends JFrame implements MarbleListener
         downleft = new JButton();
         upright = new JButton();
         upleft = new JButton();
+
+        undo = new JButton();
         setButtons();
         setBoard();
     }
@@ -78,6 +80,7 @@ public class BoardFrame extends JFrame implements MarbleListener
             downright.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/downright.png")))));
             upleft.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/upleft.png")))));
             downleft.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/downleft.png")))));
+            undo.setIcon(new ImageIcon(ImageIO.read(Objects.requireNonNull(getClass().getResource("../Assets/undo.png")))));
 
         } catch (Exception ex)
         {
@@ -129,7 +132,12 @@ public class BoardFrame extends JFrame implements MarbleListener
         downleft.setVisible(true);
         downleft.addActionListener(this::DownleftActionPerformed);
 
-
+        undo.setOpaque(false);
+        undo.setContentAreaFilled(false);
+        undo.setBounds(770,450,75,100);
+        undo.setLayout(null);
+        undo.setVisible(true);
+        undo.addActionListener(this::UndoActionPerformed);
 
         bp.add(right);
         bp.add(upright);
@@ -137,6 +145,7 @@ public class BoardFrame extends JFrame implements MarbleListener
         bp.add(downright);
         bp.add(upleft);
         bp.add(downleft);
+        bp.add(undo);
         repaint();
     }
 
@@ -223,6 +232,13 @@ public class BoardFrame extends JFrame implements MarbleListener
         ab.MakeMove(Direction.DOWNLEFT, selected, Player.WHITE);
         setBoard();
         aiMove();
+    }
+
+    private void UndoActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        ab.Undo();
+        setBoard();
+
     }
 
 }
