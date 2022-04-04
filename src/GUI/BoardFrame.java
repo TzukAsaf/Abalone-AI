@@ -14,6 +14,7 @@ public class BoardFrame extends JFrame implements MarbleListener
 {
     private BoardPanel bp;
     private JButton right, left, upright, upleft, downright, downleft, undo;
+    private JLabel blackCount, whiteCount;
     private BoardManage ab;
     private ArrayList<Point> selected;// the marbles that the player has selected
     private int width,height, changewidth = 55;
@@ -48,7 +49,11 @@ public class BoardFrame extends JFrame implements MarbleListener
         upleft = new JButton();
 
         undo = new JButton();
+
+        blackCount = new JLabel("0");
+        whiteCount = new JLabel("0");
         setButtons();
+        setLabels();
         setBoard();
     }
 
@@ -68,6 +73,7 @@ public class BoardFrame extends JFrame implements MarbleListener
             bp.set_board(ab.boardDescription());
             bp.setPanelsByBoard();
         }
+        setScores();
     }
 
     public void setButtons()
@@ -149,12 +155,45 @@ public class BoardFrame extends JFrame implements MarbleListener
         repaint();
     }
 
+    public void setLabels()
+    {
+        blackCount.setLayout(null);
+        blackCount.setBounds(750,20,90,90);
+        blackCount.setFont(new Font("impact",Font.PLAIN, 40));
+        blackCount.setForeground(Color.BLACK);
+
+        whiteCount.setLayout(null);
+        whiteCount.setBounds(836,20,90,90);
+        whiteCount.setFont(new Font("impact",Font.PLAIN, 40));
+        whiteCount.setForeground(Color.WHITE);
+
+
+
+        bp.add(blackCount);
+        bp.add(whiteCount);
+        repaint();
+    }
+
+    public void setScores()
+    {
+        bp.remove(blackCount);
+        bp.remove(whiteCount);
+        blackCount.setText(String.valueOf(14-ab.dataStructure.numOfBlacks));
+        whiteCount.setText(String.valueOf(14-ab.dataStructure.numOfWhites));
+        bp.add(blackCount);
+        bp.add(whiteCount);
+        repaint();
+
+
+    }
+
     public void aiMove()
     {
         if(ab.computerTurn)
         {
             ab.MakeAIMove();
             setBoard();
+
         }
 
         ab.computerTurn = false;
@@ -237,6 +276,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     private void UndoActionPerformed(java.awt.event.ActionEvent evt)
     {
         ab.Undo();
+        selected.clear();
         setBoard();
 
     }

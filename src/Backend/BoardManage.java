@@ -16,7 +16,7 @@ public class BoardManage
     public boolean gameOver = false;
     public int numOfRows;
     public int numOfColsInFirstRow;
-    private BoardStructure dataStructure;
+    public BoardStructure dataStructure;
     public boolean computerTurn = false;
     Evaluate evaluate;
     private int level;
@@ -342,7 +342,11 @@ public class BoardManage
     public void Undo()
     {
         if(!undoStack.isEmpty())
+        {
             dataStructure = undoStack.pop();
+
+
+        }
     }
 
 
