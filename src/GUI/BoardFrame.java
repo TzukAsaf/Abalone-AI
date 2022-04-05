@@ -12,18 +12,18 @@ import java.util.Objects;
 
 public class BoardFrame extends JFrame implements MarbleListener
 {
-    private BoardPanel bp;
+    private BoardPanel panel;
     private JButton right, left, upright, upleft, downright, downleft, undo;
     private JLabel blackCount, whiteCount;
-    private BoardManage ab;
+    private BoardManage board;
     private ArrayList<Point> selected;// the marbles that the player has selected
     private int width,height, changewidth = 55;
 
     /**
      * the frame constructor
-     * @param ab
+     * @param board
      */
-    public BoardFrame(BoardManage ab){
+    public BoardFrame(BoardManage board){
 
         setLayout(null);
         width=1000;
@@ -31,13 +31,13 @@ public class BoardFrame extends JFrame implements MarbleListener
         setVisible(true);
         setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        bp=new BoardPanel(this);
+        panel =new BoardPanel(this);
         setLocationRelativeTo(null);//make the screen pop up in middle
         setResizable(false);
-        this.ab = ab;
+        this.board = board;
         selected = new ArrayList<>();
-        add(bp);
-        bp.setBounds(0, 0, width, height);
+        add(panel);
+        panel.setBounds(0, 0, width, height);
 
 
         left = new JButton();
@@ -63,15 +63,15 @@ public class BoardFrame extends JFrame implements MarbleListener
     public void setBoard()
     {
 
-        if(bp.get_board()==null)
+        if(panel.get_board()==null)
         {
-            bp.set_board(ab.boardDescription());
-            bp.initMarbles();
+            panel.set_board(board.boardDescription());
+            panel.initMarbles();
         }
         else
         {
-            bp.set_board(ab.boardDescription());
-            bp.setPanelsByBoard();
+            panel.set_board(board.boardDescription());
+            panel.setPanelsByBoard();
         }
         setScores();
     }
@@ -145,13 +145,13 @@ public class BoardFrame extends JFrame implements MarbleListener
         undo.setVisible(true);
         undo.addActionListener(this::UndoActionPerformed);
 
-        bp.add(right);
-        bp.add(upright);
-        bp.add(left);
-        bp.add(downright);
-        bp.add(upleft);
-        bp.add(downleft);
-        bp.add(undo);
+        panel.add(right);
+        panel.add(upright);
+        panel.add(left);
+        panel.add(downright);
+        panel.add(upleft);
+        panel.add(downleft);
+        panel.add(undo);
         repaint();
     }
 
@@ -169,19 +169,19 @@ public class BoardFrame extends JFrame implements MarbleListener
 
 
 
-        bp.add(blackCount);
-        bp.add(whiteCount);
+        panel.add(blackCount);
+        panel.add(whiteCount);
         repaint();
     }
 
     public void setScores()
     {
-        bp.remove(blackCount);
-        bp.remove(whiteCount);
-        blackCount.setText(String.valueOf(14-ab.dataStructure.numOfBlacks));
-        whiteCount.setText(String.valueOf(14-ab.dataStructure.numOfWhites));
-        bp.add(blackCount);
-        bp.add(whiteCount);
+        panel.remove(blackCount);
+        panel.remove(whiteCount);
+        blackCount.setText(String.valueOf(14- board.dataStructure.numOfBlacks));
+        whiteCount.setText(String.valueOf(14- board.dataStructure.numOfWhites));
+        panel.add(blackCount);
+        panel.add(whiteCount);
         repaint();
 
 
@@ -189,14 +189,14 @@ public class BoardFrame extends JFrame implements MarbleListener
 
     public void aiMove()
     {
-        if(ab.computerTurn)
+        if(board.computerTurn)
         {
-            ab.MakeAIMove();
+            board.MakeAIMove();
             setBoard();
 
         }
 
-        ab.computerTurn = false;
+        board.computerTurn = false;
     }
 
 
@@ -207,7 +207,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     @Override
     public void MarbleSelected(Point pos)
     {
-        if(ab.gameOver /*|| ab.computerTurn*/)
+        if(board.gameOver /*|| ab.computerTurn*/)
             return;
         if(selected.contains(pos))
         {
@@ -216,14 +216,14 @@ public class BoardFrame extends JFrame implements MarbleListener
             then cancel the selection of that marble
             */
             selected.remove(pos);
-            bp.get_panels()[pos.y][pos.x].drawMarble();
+            panel.get_panels()[pos.y][pos.x].drawMarble();
         }
         else
         {
             //the selected marble hasn't been selected yet
-            if(ab.LegalAdd(pos, selected, bp.get_panels()[pos.y][pos.x].getPlayer()))
+            if(board.LegalAdd(pos, selected, panel.get_panels()[pos.y][pos.x].getPlayer()))
             {
-                bp.get_panels()[pos.y][pos.x].markMarble();
+                panel.get_panels()[pos.y][pos.x].markMarble();
                 selected.add(pos);
             }
 
@@ -233,49 +233,49 @@ public class BoardFrame extends JFrame implements MarbleListener
     }
     private void RightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.MakeMove(Direction.RIGHT, selected, Player.WHITE);
+        board.MakeMove(Direction.RIGHT, selected, Player.WHITE);
         setBoard();
         aiMove();
     }
 
     private void LeftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.MakeMove(Direction.LEFT, selected, Player.WHITE);
+        board.MakeMove(Direction.LEFT, selected, Player.WHITE);
         setBoard();
         aiMove();
     }
 
     private void UprightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.MakeMove(Direction.UPRIGHT, selected, Player.WHITE);
+        board.MakeMove(Direction.UPRIGHT, selected, Player.WHITE);
         setBoard();
         aiMove();
     }
 
     private void DownrightActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.MakeMove(Direction.DOWNRIGHT, selected, Player.WHITE);
+        board.MakeMove(Direction.DOWNRIGHT, selected, Player.WHITE);
         setBoard();
         aiMove();
     }
 
     private void UpleftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.MakeMove(Direction.UPLEFT, selected, Player.WHITE);
+        board.MakeMove(Direction.UPLEFT, selected, Player.WHITE);
         setBoard();
         aiMove();
     }
 
     private void DownleftActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.MakeMove(Direction.DOWNLEFT, selected, Player.WHITE);
+        board.MakeMove(Direction.DOWNLEFT, selected, Player.WHITE);
         setBoard();
         aiMove();
     }
 
     private void UndoActionPerformed(java.awt.event.ActionEvent evt)
     {
-        ab.Undo();
+        board.Undo();
         selected.clear();
         setBoard();
 
