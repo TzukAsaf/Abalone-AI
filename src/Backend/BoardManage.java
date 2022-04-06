@@ -473,7 +473,8 @@ public class BoardManage
         }
     }
 
-    private Node SetupTree() {
+    private Node SetupTree()
+    {
         Node root = new Node(dataStructure);
         SetChildren(root, level);
         return root;
@@ -520,10 +521,10 @@ public class BoardManage
 
                 }
             }
-            return evaluate.evaluateAllBoard(node.GetBoard()) + minMaxOfChildren;
+            return evaluate.evaluateAllBoard(node.GetBoard(), player) + minMaxOfChildren;
         }
         else
-            return evaluate.evaluateAllBoard(node.GetBoard());
+            return evaluate.evaluateAllBoard(node.GetBoard(), player);
     }
 
     private Node GetBestBoard(Node root)
