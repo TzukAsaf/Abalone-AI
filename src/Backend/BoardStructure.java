@@ -113,6 +113,10 @@ public class BoardStructure {
         }
     }
 
+    /**
+     * @param pos
+     * @return what player is in the position according to the beginning board
+     */
     private Player soldierInPos(Point pos) {
         // if first or second row
         if (pos.y == 0 || pos.y == 1 || (pos.y == 2 && pos.x > 1 && pos.x < 5)) {
@@ -192,7 +196,6 @@ public class BoardStructure {
         }
         return boardLayout;
     }
-
     public ArrayList<Point> GetMarblesLocations(Player player) {
 
         ArrayList<Point> locations = new ArrayList<>();
