@@ -622,7 +622,6 @@ public class BoardManage
 
     }
 
-
     /**
      * @param dir
      * @param point
