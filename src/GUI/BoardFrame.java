@@ -228,8 +228,6 @@ public class BoardFrame extends JFrame implements MarbleListener
             }
 
         }
-        //System.out.println(pos);
-        //System.out.println(selected);
     }
     private void RightActionPerformed(java.awt.event.ActionEvent evt)
     {
