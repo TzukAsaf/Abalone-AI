@@ -1,7 +1,7 @@
-goal to achieve:
-Implementing Abalone game in java, player vs AI
 
--AI will be implemented by minimax algorithm with alpha-beta pruning
+Abalone game in java, player vs AI
 
--UNDO will be implemented as well.
+-AI is implemented by minimax algorithm with alpha-beta pruning
+
+-Implemented UNDO.
 
