@@ -275,10 +275,12 @@ public class BoardFrame extends JFrame implements MarbleListener
 
     private void UndoActionPerformed(java.awt.event.ActionEvent evt)
     {
-        board.Undo();
-        selected.clear();
-        setBoard();
-
+        if(!board.gameOver)
+        {
+            board.Undo();
+            selected.clear();
+            setBoard();
+        }
     }
 
 }
