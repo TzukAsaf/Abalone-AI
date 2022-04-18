@@ -389,6 +389,10 @@ public class BoardManage
     }
 
 
+    /**
+     * @param curBoard
+     * @return array list of all the possible boards after one move from the current one
+     */
 
     public ArrayList<BoardStructure> GetAllPossibleBoards(BoardStructure curBoard)
     {
@@ -527,6 +531,10 @@ public class BoardManage
             return evaluate.evaluateAllBoard(node.GetBoard(), player);
     }
 
+    /**
+     * @param root
+     * @return the board (node) with the highest evaluation score among the children of the root
+     */
     private Node GetBestBoard(Node root)
     {
         Node bestNode = root.GetChildren().get(0);
