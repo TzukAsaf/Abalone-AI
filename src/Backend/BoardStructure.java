@@ -49,7 +49,7 @@ public class BoardStructure {
     /**
      * @return the type of the player in the given point
      */
-    public Player getSquareContent(Point pos) {
+    public Player getSquarePlayer(Point pos) {
 
         if (dataSet[pos.y][pos.x] != null) {
             return dataSet[pos.y][pos.x].getPlayer();
@@ -60,7 +60,7 @@ public class BoardStructure {
     /**
      * sets the given player to be in the given point
      */
-    public void setSquareContent(Point pos, Player content) {
+    public void setSquarePlayer(Point pos, Player content) {
         if (content == null) {
             dataSet[pos.y][pos.x] = null;
         } else {
@@ -79,8 +79,8 @@ public class BoardStructure {
         if (dataSet[pos2.y][pos2.x] != null) {
             c2 = dataSet[pos2.y][pos2.x].getPlayer();
         }
-        setSquareContent(pos1, c2);
-        setSquareContent(pos2, c1);
+        setSquarePlayer(pos1, c2);
+        setSquarePlayer(pos2, c1);
     }
 
     public void initBoard() {
@@ -113,6 +113,10 @@ public class BoardStructure {
         }
     }
 
+    /**
+     * @param pos
+     * @return what player is in the position according to the beginning board
+     */
     private Player soldierInPos(Point pos) {
         // if first or second row
         if (pos.y == 0 || pos.y == 1 || (pos.y == 2 && pos.x > 1 && pos.x < 5)) {
@@ -179,20 +183,19 @@ public class BoardStructure {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < colsInRow; j++) {
                 pos = new Point(j, i);
-                boardLayout[i][j] = getSquareContent(pos);
+                boardLayout[i][j] = getSquarePlayer(pos);
                 pos = new Point(j, size - 1 - i);
-                boardLayout[size - 1 - i][j] = getSquareContent(pos);
+                boardLayout[size - 1 - i][j] = getSquarePlayer(pos);
             }
             colsInRow++;
         }
         // middle row
         for (int i = 0; i < colsInRow; i++) {
             pos = new Point(i, size / 2);
-            boardLayout[size / 2][i] = getSquareContent(pos);
+            boardLayout[size / 2][i] = getSquarePlayer(pos);
         }
         return boardLayout;
     }
-
     public ArrayList<Point> GetMarblesLocations(Player player) {
 
         ArrayList<Point> locations = new ArrayList<>();
