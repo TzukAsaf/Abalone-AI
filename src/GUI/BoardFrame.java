@@ -193,10 +193,27 @@ public class BoardFrame extends JFrame implements MarbleListener
         {
             board.MakeAIMove();
             setBoard();
+            if(board.gameOver)
+            {
+                int selection = JOptionPane.showConfirmDialog(this,"Do you wish to restart the game?", "", JOptionPane.YES_NO_OPTION);
+                restart(selection);
 
+            }
         }
 
         board.computerTurn = false;
+    }
+
+    public void restart(int selection)
+    {
+
+        if(selection == JOptionPane.YES_OPTION)
+        {
+            this.board = new BoardManage();
+            this.board.initBoard();
+            setBoard();
+        }
+
     }
 
 
