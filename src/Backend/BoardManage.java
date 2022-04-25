@@ -525,6 +525,10 @@ public class BoardManage
             return Evaluate(node.GetBoard());
     }
 
+    /**
+     * @param root
+     * @return the board (node) with the highest evaluation score among the children of the root
+     */
     private Node GetBestBoard(Node root)
     {
         Node bestNode = root.GetChildren().get(0);
