@@ -14,7 +14,7 @@ public class BoardFrame extends JFrame implements MarbleListener
 {
     private BoardPanel panel;
     private JButton right, left, upright, upleft, downright, downleft, undo;
-    private JLabel blackCount, whiteCount;
+    private JLabel blackCount, whiteCount, errorMassage;
     private BoardManage board;
     private ArrayList<Point> selected;// the marbles that the player has selected
     private int width,height, changewidth = 55;
@@ -52,6 +52,7 @@ public class BoardFrame extends JFrame implements MarbleListener
 
         blackCount = new JLabel("0");
         whiteCount = new JLabel("0");
+        errorMassage = new JLabel("");
         setButtons();
         setLabels();
         setBoard();
@@ -167,8 +168,13 @@ public class BoardFrame extends JFrame implements MarbleListener
         whiteCount.setFont(new Font("impact",Font.PLAIN, 40));
         whiteCount.setForeground(Color.WHITE);
 
+        errorMassage.setLayout(null);
+        errorMassage.setBounds(0,-130,500,300);
+        errorMassage.setFont(new Font("impact",Font.PLAIN, 30));
+        errorMassage.setForeground(new Color(204, 0, 0));
 
 
+        panel.add(errorMassage);
         panel.add(blackCount);
         panel.add(whiteCount);
         repaint();
@@ -216,6 +222,16 @@ public class BoardFrame extends JFrame implements MarbleListener
 
     }
 
+    public void updateErrorMessage()
+    {
+        panel.remove(errorMassage);
+        String error = board.error;
+        errorMassage.setText(error);
+        panel.add(errorMassage);
+        repaint();
+
+    }
+
 
     /**
      * the function is in charge of managing the event of clicking a marble
@@ -250,6 +266,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     {
         board.MakeMove(Direction.RIGHT, selected, Player.WHITE);
         setBoard();
+        updateErrorMessage();
         aiMove();
     }
 
@@ -257,6 +274,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     {
         board.MakeMove(Direction.LEFT, selected, Player.WHITE);
         setBoard();
+        updateErrorMessage();
         aiMove();
     }
 
@@ -264,6 +282,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     {
         board.MakeMove(Direction.UPRIGHT, selected, Player.WHITE);
         setBoard();
+        updateErrorMessage();
         aiMove();
     }
 
@@ -271,6 +290,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     {
         board.MakeMove(Direction.DOWNRIGHT, selected, Player.WHITE);
         setBoard();
+        updateErrorMessage();
         aiMove();
     }
 
@@ -278,6 +298,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     {
         board.MakeMove(Direction.UPLEFT, selected, Player.WHITE);
         setBoard();
+        updateErrorMessage();
         aiMove();
     }
 
@@ -285,6 +306,7 @@ public class BoardFrame extends JFrame implements MarbleListener
     {
         board.MakeMove(Direction.DOWNLEFT, selected, Player.WHITE);
         setBoard();
+        updateErrorMessage();
         aiMove();
     }
 

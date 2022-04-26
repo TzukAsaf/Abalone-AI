@@ -18,6 +18,7 @@ public class BoardManage
     public boolean computerTurn = false;
     private int level;
     public Stack<BoardStructure> undoStack;
+    public String error;
 
     public BoardManage() {
         this.numOfRows = 9;
@@ -80,6 +81,7 @@ public class BoardManage
      */
     public ArrayList<ArrayList<Point>> LegalMove(Direction dir,  ArrayList<Point> selectedmarbles, Player player) throws Exception
     {
+        error = "";
         int playerMarbles, opponentMarbles;
         Point oppPointsCounter;
         Point playerPointsCounter;
@@ -91,6 +93,7 @@ public class BoardManage
 
         if(selectedmarbles.isEmpty())
         {
+            error = "No marble selected";
             throw new Exception("No marble selected");
         }
         ArrayList<Point> newLocationMarbles = NewLocations(selectedmarbles, dir);
@@ -103,6 +106,7 @@ public class BoardManage
             if (!IsPointInBoundsOfBoard(newLocationMarbles.get(i)))
             {
                 selectedmarbles.clear();
+                error = "out of bounds";
                 throw new Exception("out of bounds");
             }
 
@@ -113,6 +117,7 @@ public class BoardManage
             if(dataStructure.getSquarePlayer(newLocationMarbles.get(i)) == dataStructure.getSquarePlayer(selectedmarbles.get(0)) && !selectedmarbles.contains(newLocationMarbles.get(i)))
             {
                 selectedmarbles.clear();
+                error = "self interrupting soldiers";
                 throw new Exception("self interrupting soldiers");
             }
 
@@ -133,6 +138,7 @@ public class BoardManage
                 if(IsPointInBoundsOfBoard(oppPointsCounter) && dataStructure.getSquarePlayer(oppPointsCounter) == player)
                 {
                     selectedmarbles.clear();
+                    error = "self interrupting soldiers";
                     throw new Exception("self interrupting soldiers");
                 }
 
@@ -146,6 +152,7 @@ public class BoardManage
                 if(opponentMarbles >= playerMarbles)
                 {
                     selectedmarbles.clear();
+                    error = "opponent overpowers you";
                     throw new Exception("opponent overpowers you");
                 }
 
